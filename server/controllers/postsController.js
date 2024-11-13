@@ -33,4 +33,13 @@ const getAllPosts = async (req, res) => {
     }
     
 }
-module.exports = {createPost, getAllPosts}
+
+const getMyPosts = async (req, res) => {
+    try {
+        posts = await Post.find({ creator: req.user._id }).populate("creator", "_id name")
+        res.status(200).json({posts})
+    } catch (error) {
+        res.status(400).json({error: error.message})
+    }
+}
+module.exports = {createPost, getAllPosts, getMyPosts}
