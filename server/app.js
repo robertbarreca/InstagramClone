@@ -1,21 +1,10 @@
 require("dotenv").config()
 const express = require("express")
 const mongoose = require("mongoose")
-const User = require("./models/UserModel")
 const authRoutes = require("./routes/auth")
-
-
+const postRoutes = require("./routes/posts")
 
 const app = express()
-// middleware
-app.use(express.json())
-app.use((req, res, next) => {
-    console.log(req.path, req.method)
-    next()
-})
-
-app.use("/api/auth", authRoutes)
-
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("Connected to MongoDB"))
@@ -24,3 +13,13 @@ mongoose.connect(process.env.MONGO_URI)
 app.listen(process.env.PORT, () => {
     console.log("server is running on port", process.env.PORT)
 })
+
+// middleware
+app.use(express.json())
+app.use((req, res, next) => {
+    console.log(req.path, req.method)
+    next()
+})
+
+app.use("/api/auth", authRoutes)
+app.use("/api/posts", postRoutes)
