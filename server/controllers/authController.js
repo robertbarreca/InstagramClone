@@ -1,9 +1,28 @@
-const mongoose = require("mongoose")
+/**
+ * @fileoverview Authenitcation Controllers
+ *
+ * @description This module defines the logic behind the following authentication related operations. 
+ * - Logging in an existing user
+ * - Signing up a new user
+ *
+ * @dependencies ../models/userModel, jsonwebtoken, validator, bcryptjs
+ */
+
 const User = require("../models/UserModel")
 const validator = require("validator")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 
+
+/**
+ * @function signupUser
+ * @description Handles user signup by adding a new user model to the database.
+ * 
+ * @param {Object} req - The request object containing the user credentials
+ * @param {Object} res - The response object used to send back the desired HTTP response
+ * 
+ * @returns {void} Sends a JSON response containing the created user's id, email, and name upon successful signup, or an error message upon failure.
+ */
 const signupUser = async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -44,12 +63,20 @@ const signupUser = async (req, res) => {
         // Send a response with the user data
         res.status(200).json({ _id: newUser._id, email: newUser.email, name: newUser.name });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(400).json({ error: error.message });
     }
 };
 
 
+/**
+ * @function loginUser
+ * @description Handles user login by validating credentials and returning a JWT token.
+ * 
+ * @param {Object} req - The request object containing the user credentials
+ * @param {Object} res - The response object used to send back the desired HTTP response
+ * 
+ * @returns {void} Sends a JSON response containing the user's email, id, name and JWT token upon successful login, or an error message upon failure.
+ */
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
@@ -75,8 +102,7 @@ const loginUser = async (req, res) => {
             return res.status(400).json({ error: "Invalid password" });
         }
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(400).json({ error: error.message });
     }
 };
 
