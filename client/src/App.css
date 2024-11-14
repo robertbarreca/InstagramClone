@@ -15,13 +15,65 @@ a{
 .auth-card{
   padding: 20px;
   text-align: center;
-  max-width: 400px;
+  max-width: 600px;
   margin: 10px auto;
 }
 
 
-   /* label underline focus color */
-   .input-field input[type=text]:focus {
-     border-bottom: 1px solid rgb(8, 93, 252) !important;
-     box-shadow: 0 1px 0 0 rgb(8, 93, 252) !important;
-   }
+/* label underline focus color */
+.input-field input[type=text]:focus {
+  border-bottom: 1px solid rgb(8, 93, 252) !important;
+  box-shadow: 0 1px 0 0 rgb(8, 93, 252) !important;
+}
+
+.profilePic{
+  width: 160px;
+  height: 160px;
+  border-radius: 80px;
+}
+
+.profile-header-container{
+  display: flex;
+  justify-content: space-around;
+  margin: 18px 0px;
+  border-bottom: 1px solid grey;
+}
+
+.profile-info-container{
+  display: flex;
+  justify-content: space-between;
+  width: 108%
+}
+
+.gallery{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.galleryItem{
+  width: 30%;
+}
+
+.profile-container{
+  max-width: 800px;
+  margin: 0px auto;
+}
+
+
+.home-card{
+  max-width: 500px;
+  height: max-content;
+  margin: 26px auto
+}
+
+.heart-icon{
+  color:red
+}
+
+.create-post-card{
+  margin: 30px auto;
+  max-width: 600px;
+  padding: 20px;
+  text-align: center;
+}
