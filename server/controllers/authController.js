@@ -24,16 +24,30 @@ const jwt = require("jsonwebtoken")
  * @returns {void} Sends a JSON response containing the created user's id, email, and name upon successful signup, or an error message upon failure.
  */
 const signupUser = async (req, res) => {
-    const { name, email, password } = req.body;
+    let { name, email, password } = req.body;
+
+    email = email.toLowerCase()
+    name = name.toLowerCase()
 
     // Validate input fields
     if (!name || !email || !password) {
         return res.status(400).json({ error: "All fields must be filled" });
     }
 
-    // Validate email and password
+
+
+    // Validate email and password and name
     if (!validator.isEmail(email)) {
         return res.status(400).json({ error: "Email is not valid" });
+    }
+
+    if (name.length < 3 || name.length > 25) {
+        return res.status(400).json({error: "Username must be between 3 and 25 characters"})
+    }
+
+    // Ensure name only contains valid characters (letters, numbers, underscores)
+    if (!/^[a-z0-9_]+$/.test(name)) {
+        return res.status(400).json({ error: "Name can only letters, numbers, and underscores" });
     }
 
     if (!validator.isStrongPassword(password)) {
@@ -41,10 +55,16 @@ const signupUser = async (req, res) => {
     }
 
     try {
-        // Check if the user already exists
+        // Check if the email already in use
         const savedUser = await User.findOne({ email });
         if (savedUser) {
             return res.status(400).json({ error: "Email already in use" });
+        }
+
+        // check if name exists
+        const nameExists = await User.findOne({ name })
+        if (nameExists) {
+            return res.status(400).json({error: "Username already in use"})
         }
 
         // Hash the password
@@ -78,7 +98,8 @@ const signupUser = async (req, res) => {
  * @returns {void} Sends a JSON response containing the user's email, id, name and JWT token upon successful login, or an error message upon failure.
  */
 const loginUser = async (req, res) => {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
+    email = email.toLowerCase()
 
     // Validate input fields
     if (!email || !password) {
@@ -97,7 +118,8 @@ const loginUser = async (req, res) => {
         if (match) {
             // Generate JWT token
             const token = jwt.sign({ _id: savedUser._id }, process.env.SECRET);
-            return res.status(200).json({ name: savedUser.name, email, token });
+            const {_id, name} = savedUser
+            return res.status(200).json({ token, user: {_id, name, email} });
         } else {
             return res.status(400).json({ error: "Invalid password" });
         }
