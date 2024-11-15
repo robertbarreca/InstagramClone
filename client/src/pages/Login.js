@@ -1,3 +1,11 @@
+/**
+ * @fileoverview Log In Page
+ * 
+ * @description This component renders a login form for existing users, allowing them to log in upon form submission. It handles user input for email and password and displays error messages if log in fails.
+ * 
+ * @dependencies materialize-css, react-router-dom
+ */
+
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import M from "materialize-css"
