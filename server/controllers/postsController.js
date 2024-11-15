@@ -21,15 +21,16 @@ const Post = require("../models/PostModel");
  * @returns Sends a JSON response containing the created post and the creator upon successful creation, or an error message upon failure.
  */
 const createPost = async (req, res) => {
-    const { title, body } = req.body
+    const { title, body, image } = req.body
     // check parameters are filled
-    if (!title || !body) {
-        return res.status(400).json({error: "Posts must include title and body"})
+    if (!title || !body || !image) {
+        return res.status(400).json({error: "Posts must include title body, and image"})
     }
 
     const post = new Post({
         title,
         body,
+        photo: image,
         creator: req.user
     })
 

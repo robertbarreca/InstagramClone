@@ -22,7 +22,7 @@ const postSchema = new mongoose.Schema({
     },
     photo: {
         type: String,
-        default: "no photo"
+        required: true
     },
     creator: {
         type: ObjectId,
