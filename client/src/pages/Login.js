@@ -10,10 +10,14 @@ import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
 import M from "materialize-css"
 
+import { useUser } from "../context/UserContext";
+
+
 const Login = () => {
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const { dispatch} = useUser()
 
     const handleSubmit = async () => {
         const res = await fetch(`/api/auth/login`, {
@@ -28,8 +32,8 @@ const Login = () => {
             M.toast({html: json.error, classes: "#c62828 red darken-3"})
         }
         else {
-            localStorage.setItem("jwt", json.token)
             localStorage.setItem("user", JSON.stringify(json.user))
+            dispatch({type: "LOGIN", payload: json.user})
             M.toast({ html: "Succesfully logged in!", classes: "#43a047 green darken-1" })
             navigate("/")
         }

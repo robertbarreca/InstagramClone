@@ -119,7 +119,7 @@ const loginUser = async (req, res) => {
             // Generate JWT token
             const token = jwt.sign({ _id: savedUser._id }, process.env.SECRET);
             const {_id, name} = savedUser
-            return res.status(200).json({ token, user: {_id, name, email} });
+            return res.status(200).json({ user: {_id, name, email, token} });
         } else {
             return res.status(400).json({ error: "Invalid password" });
         }
