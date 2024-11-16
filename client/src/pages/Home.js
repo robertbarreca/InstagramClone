@@ -19,7 +19,6 @@ const Home = () => {
         fetchAllPosts()
     }, [])
 
-    console.log(posts)
     return (
         <div className="home">
             {posts.length > 0 ? (

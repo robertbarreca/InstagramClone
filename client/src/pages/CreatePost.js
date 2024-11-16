@@ -26,12 +26,13 @@ const CreatePost = () => {
          * @return {void} Sends a success message upon successful request, or an error message upon failiure
          */
         const createPost = async () => {
+            const user = JSON.parse(localStorage.getItem("user"))
             try {
                 const res = await fetch(`/api/posts/createpost`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": "Bearer " + localStorage.getItem("jwt")
+                        "Authorization": "Bearer " + user.token
                     },
                     body: JSON.stringify({ title, body, image: url })
                 })
@@ -92,7 +93,7 @@ const CreatePost = () => {
         })
             // set url upon succesful post
             const json = await res.json()
-            setUrl(json.url)
+            setUrl(json.secure_url)
         } catch (error) {
             console.error(error)
             return

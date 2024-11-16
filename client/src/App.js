@@ -15,9 +15,7 @@ const Routing = () => {
   const navigate = useNavigate()
   useEffect(() => {
     if (user) {
-      console.log(user)
       dispatch({ type: "LOGIN", payload: user });
-      navigate("/")
     } 
     else {
       navigate("/signup")

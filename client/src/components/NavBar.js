@@ -1,8 +1,17 @@
 import {Link} from "react-router-dom"
-import {useUser} from "../context/UserContext"
+import { useUser } from "../context/UserContext"
+import { useNavigate } from "react-router-dom"
 
 const NavBar = () => {
-    const {state} = useUser()
+    const { state, dispatch } = useUser()
+    const navigate = useNavigate()
+
+    const handleLogout = () => {
+        localStorage.clear()
+        dispatch({ type: "LOGOUT" })
+        navigate("/login")
+    }
+
     return (
         <nav>
             <div className="nav-wrapper white">
@@ -16,6 +25,12 @@ const NavBar = () => {
                     )}
                     {state && (
                         <div>
+                            <li>
+                                <button
+                                    className="btn #c62828 red darken-3"
+                                    onClick={handleLogout}
+                                >Logout</button>
+                            </li>
                             <li><Link to="/profile">Profile</Link></li>
                             <li><Link to="/create">Create Post</Link></li>
                         </div>
