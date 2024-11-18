@@ -8,7 +8,6 @@
  *
  * @dependencies ../models/PostModel 
  */
-
 const Post = require("../models/PostModel");
 
 /**

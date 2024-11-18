@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Signup from "./pages/Signup";
 import CreatePost from "./pages/CreatePost";
+import UserProfile from "./pages/UserProfile"
 import { useEffect } from "react";
 import { useUser, UserProvider } from "./context/UserContext";
 
@@ -27,9 +28,10 @@ const Routing = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/profile" element={<Profile />} />
+      <Route exact path="/profile" element={<Profile />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/create" element={<CreatePost />} />
+      <Route path="/profile/:userId" element={<UserProfile />} />
     </Routes>
   );
 };

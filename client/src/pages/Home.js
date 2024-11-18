@@ -30,7 +30,7 @@ const Home = () => {
                 })
                 const json = await res.json()
                 setPosts(json.posts)
-                console.log(json.posts)
+                // console.log(json.posts)
             } catch (error) {
                 console.log({error: error.message})
             }

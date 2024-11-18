@@ -3,14 +3,16 @@
  * 
  * @description This file renders all information related to a singular post including, likes, comments, the post title, body and author
  * 
- * @dependencies materialize-css
+ * @dependencies materialize-css, react-router-dom
  */
 
 import { useState, useRef } from "react";
 import M from "materialize-css"
+import { Link } from "react-router-dom";
 
 const PostCard = (props) => {
     const post = props.post;
+    console.log(post)
     const user = JSON.parse(localStorage.getItem("user"));
     const [likes, setLikes] = useState(Object.keys(post.likes).length);
     const [hasLiked, setHasLiked] = useState(user._id in post.likes); 
@@ -93,6 +95,7 @@ const PostCard = (props) => {
         // update posts to rerender page
         const updatedPosts = props.allPosts.filter((p) => p._id !== post._id);
         props.setPosts(updatedPosts)
+        M.toast({ html: "Post deleted successfully!", classes: "#43a047 green darken-1" })
     }
 
 /**
@@ -129,7 +132,12 @@ const PostCard = (props) => {
 
     return (
         <div className="card home-card">
-            <h5>{post.creator.name}
+            <h5>
+                {/* navigate to own profile or other conditionally */}
+                <Link
+                    to={post.creator._id !== user._id ? `/profile/${post.creator._id}` : `/profile`}>
+                    {post.creator.name}
+                </Link>
                 {post.creator._id === user._id &&
                     <i className="material-icons del-btn" onClick={deletePost}>
                         delete
@@ -138,6 +146,7 @@ const PostCard = (props) => {
             <div className="card-image">
                 <img alt={post.creator.name + "'s post"} src={post.photo}></img>
             </div>
+            {/* display hearts conditionally */}
             <div className="card-content">
                 {hasLiked ? (
                     <i className="material-icons heart-icon" onClick={unlikePost}>favorite</i>
@@ -148,6 +157,7 @@ const PostCard = (props) => {
                 <h6>{likes} likes</h6>
                 <h6>{post.title}</h6>
                 <p>{post.body}</p>
+                {/* comment form */}
                 <form onSubmit={
                     (e) => {
                         e.preventDefault()
@@ -155,18 +165,24 @@ const PostCard = (props) => {
                 }}>
                     <input type="text" placeholder="add a comment" ref={commentInputRef}></input>
                 </form>
-                {comments.map(comm => {
-                    return (
-                        <span key={comm._id}>
-                            <p>
-                                <span className="user-label">
-                                    {comm.author.name + " "}
-                                </span>
-                                {comm.text}
-                            </p>
-                        </span>
-                    );
-                })}
+                {/* display comments */}
+                {comments && comments.map(comm => {
+    return (
+        <span key={comm._id}>
+            <p>
+                <span className="user-label">
+                    {/* Check if comm.author is valid */}
+                    {comm.author && (
+                        <Link to={user._id === comm.author._id ? "/profile" : `/profile/${comm.author._id}`}>
+                            {comm.author.name + " "}
+                        </Link>
+                    )}
+                </span>
+                {comm.text}
+            </p>
+        </span>
+    );
+})}
             </div>
         </div>
     );

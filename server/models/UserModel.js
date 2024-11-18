@@ -6,7 +6,7 @@
  * @dependencies mongoose
  */
 const mongoose = require("mongoose")
-
+const {ObjectId} = mongoose.Schema.Types
 
 // The schema for a user
 const userSchema = new mongoose.Schema({
@@ -22,6 +22,16 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    followers: {
+        type: Map,
+        of: Boolean,
+        default: {}
+    },
+    following: {
+        type: Map,
+        of: Boolean,
+        default: {}
     }
 })
 
