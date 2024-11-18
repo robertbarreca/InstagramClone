@@ -4,7 +4,6 @@ import {useUser} from "../context/UserContext"
 const Profile = () => {
     const [photos, setPhotos] = useState([])
     const { state } = useUser()
-    console.log(state)
 
     useEffect(() => {
         const getUserPosts = async () => {

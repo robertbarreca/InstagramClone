@@ -24,6 +24,15 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    likes: {
+        type: Map,
+        of: Boolean,
+        default: {}
+    },
+    comments: [{
+        text: String,
+        author: {type: ObjectId, ref: "User"}
+    }],
     creator: {
         type: ObjectId,
         ref: "User",

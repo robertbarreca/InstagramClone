@@ -87,3 +87,7 @@ a{
   right: 20px !important;
   left: auto !important;
 }
+
+.user-label{
+  font-weight: bold;
+}
