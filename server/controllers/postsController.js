@@ -141,4 +141,31 @@ const comment = async (req, res) => {
     
 }
 
-module.exports = {createPost, getAllPosts, getMyPosts, likePost, unlikePost, comment}
+const deletePost = async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const userId = req.user._id;
+
+        // Find the post by ID
+        const post = await Post.findById(postId);
+
+        // Check if the post exists
+        if (!post) {
+            return res.status(404).json({ error: "Post not found" });
+        }
+
+        // Check if the requesting user is the creator of the post
+        if (post.creator.toString() === userId.toString()) {
+            // Delete the post
+            await Post.findByIdAndDelete(postId);
+            return res.status(200).json({ deletedPost: post });
+        } else {
+            return res.status(403).json({ error: "You must be the creator of this post to delete it" });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+module.exports = {createPost, getAllPosts, getMyPosts, likePost, unlikePost, comment, deletePost}

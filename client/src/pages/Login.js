@@ -12,13 +12,25 @@ import M from "materialize-css"
 
 import { useUser } from "../context/UserContext";
 
-
+/**
+ * @function Login
+ * @description This page renders the form for user sign up. And it contains the logic to create a new user document on the backend api.
+ * 
+ * @returns {JSX.Element} The rendered sign up page containing a form to sign up
+ */
 const Login = () => {
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const { dispatch} = useUser()
 
+    /**
+     * @function handleSubmit
+     * @description Sends a post request to the API setting the body to be password and email. It then alerts the user if the request was a success or not.
+     * 
+     * @async
+     * @returns {void} Sends a success message and navigates to the login page upon success. Or sends an error message upon failiure
+     */
     const handleSubmit = async () => {
         const res = await fetch(`/api/auth/login`, {
             method: "POST",

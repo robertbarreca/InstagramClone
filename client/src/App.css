@@ -91,3 +91,7 @@ a{
 .user-label{
   font-weight: bold;
 }
+
+.del-btn{
+  float: right
+}

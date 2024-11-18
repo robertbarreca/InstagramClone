@@ -27,6 +27,7 @@ const Signup = () => {
      * @function handleSubmit
      * @description Sends a post request to the API setting the body to be username, password and email. It then alerts the user if the request was a success or not.
      * 
+     * @async
      * @returns {void} Sends a success message and navigates to the login page upon success. Or sends an error message upon failiure
      */
     const handleSubmit = async () => {

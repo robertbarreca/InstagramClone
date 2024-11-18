@@ -1,4 +1,13 @@
+/**
+ * @fileoverview Post Card
+ * 
+ * @description This file renders all information related to a singular post including, likes, comments, the post title, body and author
+ * 
+ * @dependencies materialize-css
+ */
+
 import { useState, useRef } from "react";
+import M from "materialize-css"
 
 const PostCard = (props) => {
     const post = props.post;
@@ -6,10 +15,17 @@ const PostCard = (props) => {
     const [likes, setLikes] = useState(Object.keys(post.likes).length);
     const [hasLiked, setHasLiked] = useState(user._id in post.likes); 
     const [comments, setComments] = useState(post.comments)
-    // console.log(post.comments)
 
     const commentInputRef = useRef();
 
+/**
+ * @function likePost
+ * @description This function sends an API request to update the likes for the current post. It updates the like count and the user's like status in the component's state after a successful response.
+ * @async
+ * @returns {Promise<void>} A promise that resolves when the like count is successfully updated, 
+ *                           or logs an error if the request fails.
+ * @throws {Error} If there is an error during the fetch request, the error is logged to the console.
+ */
     const likePost = async () => {
         try {
             const res = await fetch(`/api/posts/like/${post._id}`, {
@@ -34,6 +50,14 @@ const PostCard = (props) => {
         }
     };
 
+/**
+ * @function likePost
+ * @description This function sends an API request to update the likes for the current post. It updates the like count and the user's like status in the component's state after a successful response.
+ * @async
+ * @returns {Promise<void>} A promise that resolves when the like count is successfully updated, 
+ *                           or logs an error if the request fails.
+ * @throws {Error} If there is an error during the fetch request, the error is logged to the console.
+ */
     const unlikePost = async () => {
         const res = await fetch(`/api/posts/unlike/${post._id}`, {
             method: "PUT",
@@ -48,7 +72,45 @@ const PostCard = (props) => {
         setHasLiked(false); 
     };
 
-    const makeComment = async (text) => {
+    /**
+     * @function deletePost
+     * @description This function sends an API request to delete a post. It then update the posts state variable upon success
+     * 
+     * @async
+     * @returns {Promise<void>} A promise that resolves when the like count is successfully updated, or logs an error if the request fails.
+     * @throws {Error} If there is an error during the fetch request, the error is logged to the console.
+     */
+    const deletePost = async () => {
+        const res = await fetch(`/api/posts/delete/${post._id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + user.token
+            }
+        })
+        const json = await res.json()
+        console.log(json)
+        // update posts to rerender page
+        const updatedPosts = props.allPosts.filter((p) => p._id !== post._id);
+        props.setPosts(updatedPosts)
+    }
+
+/**
+ * @function makeComment
+ * @description This function sends an API request to add a new comment to the current post. It updates the post's comment section in the component's state with the new comment after a successful response.
+ * 
+ * @async
+ * @returns {Promise<void>} A promise that resolves when the comment is successfully added and the state is updated with the new comment.
+ * @throws {Error} If there is an error during the fetch request, the error is logged to the console.
+ */
+    const makeComment = async () => {
+        const text = commentInputRef.current.value;
+
+        if (!text) {
+            M.toast({ html: "comments must have text", classes: "#c62828 red darken-3" })
+            return
+        }
+
         const res = await fetch(`/api/posts/comment/${post._id}`, {
             method: "PUT",
             headers: {
@@ -67,7 +129,12 @@ const PostCard = (props) => {
 
     return (
         <div className="card home-card">
-            <h5>{post.creator.name}</h5>
+            <h5>{post.creator.name}
+                {post.creator._id === user._id &&
+                    <i className="material-icons del-btn" onClick={deletePost}>
+                        delete
+                    </i>}
+            </h5>
             <div className="card-image">
                 <img alt={post.creator.name + "'s post"} src={post.photo}></img>
             </div>
@@ -84,7 +151,7 @@ const PostCard = (props) => {
                 <form onSubmit={
                     (e) => {
                         e.preventDefault()
-                        makeComment(e.target[0].value)
+                        makeComment()
                 }}>
                     <input type="text" placeholder="add a comment" ref={commentInputRef}></input>
                 </form>
