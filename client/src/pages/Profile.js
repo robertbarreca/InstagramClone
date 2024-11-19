@@ -14,6 +14,7 @@ const Profile = () => {
                 }
             })
             const json = await res.json()
+            console.log(json)
             setPhotos(json.posts)
         }
         getUserPosts()    
@@ -28,7 +29,10 @@ const Profile = () => {
                 <div>
                     <h4>{state ? state.name: "loading"}</h4>
                     <div className="profile-info-container">
-                        <h5>40 Posts</h5>
+                        <h5>
+                                    {photos.length}
+                                    {photos.length === 1 ? " Post" : " Posts"}
+                                </h5>
                         <h5>14 Followers</h5>
                         <h5>56 Following</h5>
                     </div>

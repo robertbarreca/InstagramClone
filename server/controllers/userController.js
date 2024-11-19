@@ -37,15 +37,15 @@ const followUser = async (req, res) => {
             req.params.id,
             { [`followers.${userId}`]: true },
             { new: true }
-        )
+        ).select("-password")
 
         // add influencer to your following list
-        const follower = await User.findByIdAndUpdate(
+        const wannabe = await User.findByIdAndUpdate(
             userId,
             { [`following.${req.params.id}`]: true },
             { new: true }
-        )
-        res.status(200).json({following: follower.following})
+        ).select("-password")
+        res.status(200).json({influencer, wannabe})
     } catch (error) {
         res.status(400).json({error: error.message})
     }
@@ -63,15 +63,15 @@ const unfollowUser = async (req, res) => {
             req.params.id,
             { $unset: {[`followers.${userId}`]: ""} },
             { new: true }
-        )
+        ).select("-password")
 
         // add influencer to your following list
-        const follower = await User.findByIdAndUpdate(
+        const wannabe = await User.findByIdAndUpdate(
             userId,
             { $unset: {[`following.${req.params.id}`]: ""} },
             { new: true }
-        )
-        res.status(200).json({following: follower.following})
+        ).select("-password")
+        res.status(200).json({influencer, wannabe})
     } catch (error) {
         res.status(400).json({error: error.message})
     }

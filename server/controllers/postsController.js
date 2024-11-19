@@ -109,6 +109,7 @@ const unlikePost = async (req, res) => {
         const postId = req.params.id;
         const userId = req.user._id;
 
+
         const result = await Post.findByIdAndUpdate(
             postId,
             { $unset: { [`likes.${userId}`]: "" } }, 

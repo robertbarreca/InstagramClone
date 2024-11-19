@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 
 const PostCard = (props) => {
     const post = props.post;
-    console.log(post)
     const user = JSON.parse(localStorage.getItem("user"));
     const [likes, setLikes] = useState(Object.keys(post.likes).length);
     const [hasLiked, setHasLiked] = useState(user._id in post.likes); 
@@ -61,7 +60,8 @@ const PostCard = (props) => {
  * @throws {Error} If there is an error during the fetch request, the error is logged to the console.
  */
     const unlikePost = async () => {
-        const res = await fetch(`/api/posts/unlike/${post._id}`, {
+        try {
+            const res = await fetch(`/api/posts/unlike/${post._id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -72,6 +72,10 @@ const PostCard = (props) => {
         const json = await res.json();
         setLikes(Object.keys(json.likes).length);
         setHasLiked(false); 
+        } catch (error) {
+            console.log({error: error.message})
+        }
+        
     };
 
     /**

@@ -10,6 +10,14 @@ const userReducer = (state, action) => {
       return action.payload;
     case "LOGOUT":
       return null;
+    case "UPDATE":
+      const updatedState = {
+        ...state,
+        followers: action.payload.followers, 
+        following: action.payload.following
+      }
+      localStorage.setItem("user", JSON.stringify(updatedState))
+      return updatedState
     default:
       return state;
   }
