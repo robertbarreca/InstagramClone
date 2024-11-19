@@ -32,22 +32,26 @@ const Login = () => {
      * @returns {void} Sends a success message and navigates to the login page upon success. Or sends an error message upon failiure
      */
     const handleSubmit = async () => {
-        const res = await fetch(`/api/auth/login`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ password, email })
-        })
+        try {
+            const res = await fetch(`/api/auth/login`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ password, email })
+            })
 
-        const json = await res.json()
-        
-        if (json.error) {
-            M.toast({html: json.error, classes: "#c62828 red darken-3"})
-        }
-        else {
-            localStorage.setItem("user", JSON.stringify(json.user))
-            dispatch({type: "LOGIN", payload: json.user})
-            M.toast({ html: "Succesfully logged in!", classes: "#43a047 green darken-1" })
-            navigate("/")
+            const json = await res.json()
+            
+            if (json.error) {
+                M.toast({html: json.error, classes: "#c62828 red darken-3"})
+            }
+            else {
+                localStorage.setItem("user", JSON.stringify(json.user))
+                dispatch({type: "LOGIN", payload: json.user})
+                M.toast({ html: "Succesfully logged in!", classes: "#43a047 green darken-1" })
+                navigate("/")
+            }
+        } catch (error) {
+            M.toast({html: error.message, classes: "#c62828 red darken-3"})
         }
     }
 

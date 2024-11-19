@@ -108,7 +108,7 @@ const loginUser = async (req, res) => {
 
     try {
         // Check if the user exists
-        const savedUser = await User.findOne({ email });
+        const savedUser = await User.findOne({ email })
         if (!savedUser) {
             return res.status(400).json({ error: "User does not exist" });
         }
@@ -118,8 +118,17 @@ const loginUser = async (req, res) => {
         if (match) {
             // Generate JWT token
             const token = jwt.sign({ _id: savedUser._id }, process.env.SECRET);
-            const {_id, name} = savedUser
-            return res.status(200).json({ user: {_id, name, email, token} });
+            const { _id, name, email, followers, following } = savedUser.toObject(); // Convert to plain object
+            return res.status(200).json({
+                user: {
+                    _id,
+                    name,
+                    email,
+                    followers: Array.from(followers.keys()),
+                    following: Array.from(following.keys()),
+                    token,
+                }
+            })
         } else {
             return res.status(400).json({ error: "Invalid password" });
         }
