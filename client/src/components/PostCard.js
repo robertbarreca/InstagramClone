@@ -139,7 +139,7 @@ const PostCard = (props) => {
             <h5>
                 {/* navigate to own profile or other conditionally */}
                 <Link
-                    to={post.creator._id !== user._id ? `/profile/${post.creator._id}` : `/profile`}>
+                    to={`/profile/${post.creator._id}`}>
                     {post.creator.name}
                 </Link>
                 {post.creator._id === user._id &&
@@ -159,7 +159,7 @@ const PostCard = (props) => {
                 )}
 
                 <h6>{likes} likes</h6>
-                <h6>{post.title}</h6>
+                <h6 className="post-title">{post.title}</h6>
                 <p>{post.body}</p>
                 {/* comment form */}
                 <form onSubmit={
@@ -177,7 +177,7 @@ const PostCard = (props) => {
                 <span className="user-label">
                     {/* Check if comm.author is valid */}
                     {comm.author && (
-                        <Link to={user._id === comm.author._id ? "/profile" : `/profile/${comm.author._id}`}>
+                        <Link to={`/profile/${comm.author._id}`}>
                             {comm.author.name + " "}
                         </Link>
                     )}

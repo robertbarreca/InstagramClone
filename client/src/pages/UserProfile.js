@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
 import { useParams } from "react-router-dom";
+import M from "materialize-css"
 
 const UserProfile = () => {
     const [influencerInfo, setInfluencerInfo] = useState(null);
@@ -8,6 +9,8 @@ const UserProfile = () => {
     const { userId } = useParams();
     const { dispatch } = useUser();
     const user = JSON.parse(localStorage.getItem("user"));
+    const [isOwner] = useState(user._id === userId)
+
     
     useEffect(() => {
         const getUserData = async () => {
@@ -19,7 +22,6 @@ const UserProfile = () => {
                 });
                 const json = await res.json();
                 setInfluencerInfo(json);
-                console.log(json)
                 // Set initial doesFollow state
                 setDoesFollow(Object.keys(json.user.followers).includes(user._id));
             } catch (error) {
@@ -40,7 +42,11 @@ const UserProfile = () => {
                 },
             });
             const json = await res.json();
-            console.log(json)
+            if (!res.ok) {
+                M.toast({ html: json.error, classes: "#c62828 red darken-3" })
+                return
+            }
+            
             // Update userInfo and doesFollow state
             setInfluencerInfo((prev) => ({
                 ...prev,
@@ -62,7 +68,7 @@ const UserProfile = () => {
                 },
             });
         } catch (error) {
-            console.error(`Error during ${action}:`, error.message);
+            console.log(`Error during ${action}:`, error.message);
         }
     };
 
@@ -91,7 +97,7 @@ const UserProfile = () => {
                                 </h5>
                                 <h5>{Object.keys(influencerInfo.user.following).length} Following</h5>
                             </div>
-                            {doesFollow ? (
+                            {!isOwner && (doesFollow ? (
                                 <button
                                     className="btn waves-effect waves-light #64bf56 blue darken-1 toggle-btn"
                                     onClick={() => handleFollowToggle("unfollow")}
@@ -105,7 +111,7 @@ const UserProfile = () => {
                                 >
                                     Follow
                                 </button>
-                            )}
+                            ))}
                         </div>
                     </div>
 

@@ -99,3 +99,11 @@ a{
 .toggle-btn{
   margin: 10px
 }
+
+.post-title{
+  font-weight: bold;
+}
+
+.material-icons {
+    cursor: pointer;
+}

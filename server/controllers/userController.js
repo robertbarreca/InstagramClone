@@ -29,9 +29,9 @@ const followUser = async (req, res) => {
     try {
         const userId = req.user._id;
         // check if attempting follow themselves
-        if (userId === req.params.id) {
+        if (userId.toString() === req.params.id.toString()) {
             return res.status(400).json({ error: "You cannot follow yourself" });
-        }
+        } 
         // add yourself to other's following list
         const influencer = await User.findByIdAndUpdate(
             req.params.id,

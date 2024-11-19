@@ -31,7 +31,7 @@ const NavBar = () => {
                                     onClick={handleLogout}
                                 >Logout</button>
                             </li>
-                            <li><Link to="/profile">Profile</Link></li>
+                            <li><Link to={`/profile/${state._id}`}>Profile</Link></li>
                             <li><Link to="/create">Create Post</Link></li>
                         </div>
                     )}

@@ -3,7 +3,6 @@ import NavBar from "./components/NavBar";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Profile from "./pages/Profile";
 import Signup from "./pages/Signup";
 import CreatePost from "./pages/CreatePost";
 import UserProfile from "./pages/UserProfile"
@@ -12,7 +11,10 @@ import { useUser, UserProvider } from "./context/UserContext";
 
 const Routing = () => {
   const { dispatch } = useUser();
-  const user = JSON.parse(localStorage.getItem("user"));
+  let user = (localStorage.getItem("user"))
+  if (user) {
+    user = JSON.parse(user) 
+  }
   const navigate = useNavigate()
   useEffect(() => {
     if (user) {
@@ -28,7 +30,6 @@ const Routing = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
-      <Route exact path="/profile" element={<Profile />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/create" element={<CreatePost />} />
       <Route path="/profile/:userId" element={<UserProfile />} />
