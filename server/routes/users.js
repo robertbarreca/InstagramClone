@@ -13,13 +13,15 @@
 const express = require("express")
 const router = express.Router()
 const requireToken = require("../middleware/requireToken")
-const {getUser, followUser, unfollowUser} = require("../controllers/userController")
+const {getUser, followUser, unfollowUser, updatePic} = require("../controllers/userController")
 
 router.get('/:id', requireToken, getUser)
 
 router.put("/follow/:id", requireToken, followUser)
 
 router.put("/unfollow/:id", requireToken, unfollowUser)
+
+router.put("/updatepic", requireToken, updatePic )
 
 
 module.exports = router

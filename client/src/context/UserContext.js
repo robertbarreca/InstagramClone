@@ -5,17 +5,27 @@ const initialState = null;
 
 // Reducer Function
 const userReducer = (state, action) => {
+  let updatedState = {}
   switch (action.type) {
     case "LOGIN":
       return action.payload;
     case "LOGOUT":
       return null;
     case "UPDATE":
-      const updatedState = {
+      updatedState = {
         ...state,
         followers: action.payload.followers, 
         following: action.payload.following
       }
+      localStorage.setItem("user", JSON.stringify(updatedState))
+      return updatedState
+    case "UPDATE_PIC":
+      console.log(action.payload)
+      updatedState = {
+        ...state,
+        pic: action.payload
+      }
+      console.log(updatedState)
       localStorage.setItem("user", JSON.stringify(updatedState))
       return updatedState
     default:

@@ -77,5 +77,18 @@ const unfollowUser = async (req, res) => {
     }
 }
 
+const updatePic = async (req, res) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user._id,
+            { $set: { pic: req.body.pic } },
+            { new: true }
+        )
+        res.status(200).json({ user:  updatedUser})
+    } catch (error) {
+        res.status(400).json({error: error.message})
+    }
+}
 
-module.exports = {getUser, followUser, unfollowUser}
+
+module.exports = {getUser, followUser, unfollowUser, updatePic}

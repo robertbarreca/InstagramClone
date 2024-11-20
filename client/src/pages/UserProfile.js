@@ -10,6 +10,8 @@ const UserProfile = () => {
     const { dispatch } = useUser();
     const user = JSON.parse(localStorage.getItem("user"));
     const [isOwner] = useState(user._id === userId)
+    const [image, setImage] = useState("")
+    const [url, setUrl] = useState(undefined)
     // console.log(isOwner)
     
     useEffect(() => {
@@ -22,6 +24,7 @@ const UserProfile = () => {
                 });
                 const json = await res.json();
                 setInfluencerInfo(json);
+                console.log(json)
                 // Set initial doesFollow state
                 setDoesFollow(user._id in json.user.followers);
             } catch (error) {
@@ -72,19 +75,118 @@ const UserProfile = () => {
         }
     };
 
+    useEffect(() => {
+        const uploadPic = async () => {
+    // Check if the file is an image
+    if (!image.type.startsWith('image/')) {
+        M.toast({ html: "Please upload a valid image file", classes: "#c62828 red darken-3" })
+        setImage("")
+        return
+    }
+
+    try {
+        const data = new FormData()
+        data.append("file", image)
+        data.append("upload_preset", "instaclone")
+        data.append("cloud_name", "dgbh16ua3")
+
+        let res = await fetch("https://api.cloudinary.com/v1_1/dgbh16ua3/image/upload", {
+            method: "POST",
+            body: data,
+        })
+
+        const json = await res.json()
+        setUrl(json.secure_url)
+        dispatch({ type: "UPDATE_PIC", payload: json.secure_url })
+
+        // Update influencerInfo with the new profile pic URL
+        setInfluencerInfo((prev) => ({
+            ...prev,
+            user: {
+                ...prev.user,
+                pic: json.secure_url,  // Update the profile pic URL
+            },
+        }));
+
+        // Now call uploadPicBackend with the correct URL
+        uploadPicBackend(json.secure_url)
+
+    } catch (error) {
+        console.error(error)
+        return
+    }
+}
+
+const uploadPicBackend = async (newPicUrl) => {
+    try {
+        console.log("upload pic backend called")
+
+        const res = await fetch("/api/users/updatepic", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",  // Corrected header
+                "Authorization": "Bearer " + user.token
+            },
+            body: JSON.stringify({
+                pic: newPicUrl  // Use the new URL passed as an argument
+            })
+        })
+
+        const json = await res.json()
+        console.log(json)
+
+        // Handle any further logic after the backend response if needed
+    } catch (error) {
+        console.log({error: error.message})
+    }
+}
+        
+        
+        if (image) {
+            uploadPic()
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [image])
+
+    
+
     return (
         <>
-            {/* {console.log(influencerInfo.user.pic)} */}
             {influencerInfo ? (
                 <div className="profile-container">
                     <div className="profile-header-container">
-                        <div>
+                        {/* Profile Picture and Follow Button Container */}
+                        <div className="profile-pic-follow-container">
                             <img
                                 className="profilePic"
                                 alt="profile pic"
                                 src={influencerInfo.user.pic}
                             />
+                            {!isOwner && (
+                                <button
+                                    className="btn waves-effect waves-light #64bf56 blue darken-1 toggle-btn"
+                                    onClick={() => handleFollowToggle(doesFollow ? "unfollow" : "follow")}
+                                >
+                                    {doesFollow ? "Unfollow" : "Follow"}
+                                </button>
+                            )}
+                            {isOwner && (
+                                <div className="file-field input-field">
+                                    <div className="btn #64bf56 blue darken-1">
+                                        <span>Update Pic</span>
+                                        <input
+                                            type="file"
+                                            onChange={(e) => setImage(e.target.files[0])}
+                                        />
+                                    </div>
+                                    <div className="file-path-wrapper">
+                                        <input className="file-path validate" type="text" />
+                                    </div>
+                                </div>
+                            )}
                         </div>
+
+                        {/* Profile Info */}
                         <div>
                             <h4>{influencerInfo.user.name}</h4>
                             <div className="profile-info-container">
@@ -98,24 +200,10 @@ const UserProfile = () => {
                                 </h5>
                                 <h5>{Object.keys(influencerInfo.user.following).length} Following</h5>
                             </div>
-                            {!isOwner && (doesFollow ? (
-                                <button
-                                    className="btn waves-effect waves-light #64bf56 blue darken-1 toggle-btn"
-                                    onClick={() => handleFollowToggle("unfollow")}
-                                >
-                                    Unfollow
-                                </button>
-                            ) : (
-                                <button
-                                    className="btn waves-effect waves-light #64bf56 blue darken-1 toggle-btn"
-                                    onClick={() => handleFollowToggle("follow")}
-                                >
-                                    Follow
-                                </button>
-                            ))}
                         </div>
                     </div>
 
+                    {/* Gallery */}
                     <div className="gallery">
                         {influencerInfo.posts.map((post) => (
                             <img
@@ -132,7 +220,7 @@ const UserProfile = () => {
             )}
         </>
     );
-};
+}
 
 export default UserProfile;
 

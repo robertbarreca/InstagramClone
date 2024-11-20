@@ -112,3 +112,24 @@ a{
 .post-header{
   padding: 7px;
 }
+
+.left{
+  padding: 7px
+}
+
+.profile-header-container {
+    display: flex;
+    align-items: center; /* Vertically align profile details */
+    gap: 20px; /* Space between image and profile details */
+}
+
+.profile-pic-follow-container {
+    display: flex;
+    flex-direction: column; /* Stack profile pic and buttons vertically */
+    align-items: center;
+    gap: 10px; /* Space between the image and the buttons */
+}
+
+.file-field {
+    margin-top: 10px; /* Adds space between profile pic and 'Update Pic' button */
+}
