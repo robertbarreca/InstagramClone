@@ -1,45 +1,51 @@
 import './App.css';
 import NavBar from "./components/NavBar";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import CreatePost from "./pages/CreatePost";
 import UserProfile from "./pages/UserProfile"
 import Feed from "./pages/Feed"
-import { useEffect } from "react";
 import { useUser, UserProvider } from "./context/UserContext";
 
 const Routing = () => {
-  const { dispatch } = useUser();
-  let user = (localStorage.getItem("user"))
-  if (user) {
-    user = JSON.parse(user) 
-  }
-  const navigate = useNavigate()
-  useEffect(() => {
-    if (user) {
-      dispatch({ type: "LOGIN", payload: user });
-    } 
-    else {
-      navigate("/signup")
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return ( 
+  const {user} = useUser()
+  return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/create" element={<CreatePost />} />
-      <Route path="/profile/:userId" element={<UserProfile />} />
-      <Route path="/feed" element={<Feed />} />
-    </Routes>
-  );
-};
+          {/* authenticated routes */}
+          <Route
+            path="/"
+            element={user ? <Home /> : <Navigate to="/signup" />}
+          />
+          <Route
+            path="/create"
+            element={user ? <CreatePost /> : <Navigate to="/signup" />}
+          />
+          <Route
+            path="/profile/:userId"
+            element={user ? <UserProfile /> : <Navigate to="/signup" />}
+          />
+          <Route
+            path="/feed"
+            element={user ? <Feed /> : <Navigate to="/signup" />}
+          />
+          {/* unauthenticated routes */}
+          <Route
+            path="/login"
+            element={!user ? <Login /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/signup"
+            element={!user ? <Signup /> : <Navigate to="/" />}
+          />
+        </Routes>
+  )
+  
+}
 
 function App() {
+  
   return (
     <UserProvider>
       <BrowserRouter>

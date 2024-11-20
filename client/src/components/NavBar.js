@@ -7,7 +7,6 @@ const NavBar = () => {
     const navigate = useNavigate()
 
     const handleLogout = () => {
-        localStorage.clear()
         dispatch({ type: "LOGOUT" })
         navigate("/login")
     }
@@ -31,7 +30,7 @@ const NavBar = () => {
                                     onClick={handleLogout}
                                 >Logout</button>
                             </li>
-                            <li><Link to={`/profile/${state._id}`}>Profile</Link></li>
+                            <li><Link to={state ? `/profile/${state._id}` : "/signup"}>Profile</Link></li>
                             <li><Link to="/create">Create Post</Link></li>
                             <li><Link to="/feed">Feed</Link></li>
                         </div>

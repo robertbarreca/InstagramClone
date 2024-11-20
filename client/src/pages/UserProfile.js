@@ -11,8 +11,6 @@ const UserProfile = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const [isOwner] = useState(user._id === userId)
     const [image, setImage] = useState("")
-    const [url, setUrl] = useState(undefined)
-    // console.log(isOwner)
     
     useEffect(() => {
         const getUserData = async () => {
@@ -96,7 +94,6 @@ const UserProfile = () => {
         })
 
         const json = await res.json()
-        setUrl(json.secure_url)
         dispatch({ type: "UPDATE_PIC", payload: json.secure_url })
 
         // Update influencerInfo with the new profile pic URL

@@ -82,7 +82,7 @@ const signupUser = async (req, res) => {
         const newUser = await user.save();
 
         // Send a response with the user data
-        res.status(200).json({ _id: newUser._id, email: newUser.email, name: newUser.name });
+        res.status(200).json({ user: newUser });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

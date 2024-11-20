@@ -22,6 +22,7 @@ const Home = () => {
          * @throws {Error} If there is an error during the fetch request, the error is logged to the console.
          */
         const fetchAllPosts = async () => {
+            console.log(user)
             try {   
                 const res = await fetch("/api/posts/allPosts", {
                     headers: {
@@ -30,7 +31,7 @@ const Home = () => {
                 })
                 const json = await res.json()
                 setPosts(json.posts)
-                // console.log(json.posts)
+                console.log(json)
             } catch (error) {
                 console.log({error: error.message})
             }

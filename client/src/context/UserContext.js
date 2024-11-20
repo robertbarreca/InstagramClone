@@ -8,8 +8,13 @@ const userReducer = (state, action) => {
   let updatedState = {}
   switch (action.type) {
     case "LOGIN":
-      return action.payload;
+      updatedState = {
+        ...action.payload
+      }
+      localStorage.setItem("user", JSON.stringify(updatedState))
+      return updatedState
     case "LOGOUT":
+      localStorage.clear()
       return null;
     case "UPDATE":
       updatedState = {

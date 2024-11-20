@@ -45,7 +45,6 @@ const Login = () => {
                 M.toast({html: json.error, classes: "#c62828 red darken-3"})
             }
             else {
-                localStorage.setItem("user", JSON.stringify(json.user))
                 dispatch({type: "LOGIN", payload: json.user})
                 M.toast({ html: "Succesfully logged in!", classes: "#43a047 green darken-1" })
                 navigate("/")
