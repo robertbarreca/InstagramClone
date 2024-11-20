@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 
 const PostCard = (props) => {
     const post = props.post;
+    console.log(post.photo)
     const user = JSON.parse(localStorage.getItem("user"));
     const [likes, setLikes] = useState(Object.keys(post.likes).length);
     const [hasLiked, setHasLiked] = useState(user._id in post.likes); 
@@ -138,12 +139,11 @@ const PostCard = (props) => {
         <div className="card home-card">
             <h5>
                 {/* navigate to own profile or other conditionally */}
-                <Link
-                    to={`/profile/${post.creator._id}`}>
+                <Link to={`/profile/${post.creator._id}`} className="post-header">
                     {post.creator.name}
                 </Link>
                 {post.creator._id === user._id &&
-                    <i className="material-icons del-btn" onClick={deletePost}>
+                    <i className="material-icons del-btn post-header" onClick={deletePost}>
                         delete
                     </i>}
             </h5>

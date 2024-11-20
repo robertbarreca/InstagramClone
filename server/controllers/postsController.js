@@ -63,8 +63,23 @@ const getAllPosts = async (req, res) => {
         }    
     } catch (error) {
         res.status(400).json({error: error.message})
+    } 
+}
+
+const getFollowingPosts = async (req, res) => {
+    try {
+        // get all posts
+        const followingIds = Array.from(req.user.following.keys());
+        const posts = await Post.find({ creator: { $in: followingIds } })
+            .populate("creator", "_id name")
+            .populate("comments.author", "_id name");
+        // posts exists
+        if (posts) {
+            res.status(200).json({posts})
+        }    
+    } catch (error) {
+        res.status(400).json({error: error.message})
     }
-    
 }
 
 /**
@@ -87,6 +102,8 @@ const getMyPosts = async (req, res) => {
         res.status(400).json({error: error.message})
     }
 }
+
+
 
 const likePost = async (req, res) => {
     try {
@@ -168,4 +185,4 @@ const deletePost = async (req, res) => {
 };
 
 
-module.exports = {createPost, getAllPosts, getMyPosts, likePost, unlikePost, comment, deletePost}
+module.exports = {createPost, getAllPosts, getMyPosts, likePost, unlikePost, comment, deletePost, getFollowingPosts}

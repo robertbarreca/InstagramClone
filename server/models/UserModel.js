@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    pic: {
+        type: String,
+        default: "https://res.cloudinary.com/dgbh16ua3/image/upload/v1732061588/tdk9cqhsmtvkudcjbinj.png"
+    },
     followers: {
         type: Map,
         of: Boolean,

@@ -7,7 +7,7 @@
  */
 
 import { Link, useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import M from "materialize-css"
 
 /**
@@ -21,28 +21,76 @@ const Signup = () => {
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [image, setImage] = useState("")
+    const [url, setUrl] = useState(undefined)
 
 
-    /**
-     * @function handleSubmit
-     * @description Sends a post request to the API setting the body to be username, password and email. It then alerts the user if the request was a success or not.
-     * 
-     * @async
-     * @returns {void} Sends a success message and navigates to the login page upon success. Or sends an error message upon failiure
-     */
+    useEffect(() => {
+        if (url) {
+            createAccount()
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [url])
+
+    const createAccount = async () => {
+        try {
+            const res = await fetch(`/api/auth/signup`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: username, password, email, pic: url })
+            }) 
+            const json = await res.json()
+            if (json.error) {
+                M.toast({ html: json.error, classes: "#c62828 red darken-3" })
+            }
+            else {
+                M.toast({ html: "Succesfully signed up!", classes: "#43a047 green darken-1" })
+                navigate("/login")
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const handleSubmit = async () => {
-        const res = await fetch(`/api/auth/signup`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ name: username, password, email })
-        })
-        const json = await res.json()
-        if (json.error) {
-            M.toast({html: json.error, classes: "#c62828 red darken-3"})
+        if (image) {
+            uploadPic()
         }
         else {
-            M.toast({ html: "Succesfully signed up!", classes: "#43a047 green darken-1" })
-            navigate("/login")
+            createAccount()
+        }
+        
+    }
+
+    /**
+     * @function uploadPic 
+     * @description Verifies that state variables exist and that image is of type image. Then sends a post request to cloudinary to convert image to url.
+     * 
+     * @returns {void} Sets url state variable upon success, and sends error message upon failiure.
+     */
+    const uploadPic = async () => {
+    // Check if the file is an image
+        if (!image.type.startsWith('image/')) {
+            M.toast({ html: "Please upload a valid image file", classes: "#c62828 red darken-3" })
+            setImage("")
+            return
+        }
+        // add url to cloud if all fields are filled and image is of type image
+        try {
+        const data = new FormData()
+        data.append("file", image)
+        data.append("upload_preset", "instaclone")
+        data.append("cloud_name", "dgbh16ua3")
+        const res = await fetch("https://api.cloudinary.com/v1_1/dgbh16ua3/image/upload", {
+            method: "POST",
+            body: data,
+        })
+            // set url upon succesful post
+            const json = await res.json()
+            setUrl(json.secure_url)
+        } catch (error) {
+            console.error(error)
+            return
         }
     }
     
@@ -52,7 +100,19 @@ const Signup = () => {
                 <h2>Instagram</h2>
                 <input type="text" placeholder="email" value={email} onChange={(e)=> {setEmail(e.target.value)}}/>
                 <input type="text" placeholder="username" value={username} onChange={(e)=> {setUsername(e.target.value)}}/>
-                <input type="password" placeholder="password" value={password} onChange={(e)=> {setPassword(e.target.value)}}/>
+                <input type="password" placeholder="password" value={password} onChange={(e) => { setPassword(e.target.value) }} />
+                <div className="file-field input-field">
+                <div className="btn #64bf56 blue darken-1">
+                    <span>Upload Profile Picture</span>
+                        <input
+                            type="file"
+                            onChange={(e) => setImage(e.target.files[0])}
+                        />
+                </div>
+                <div className="file-path-wrapper">
+                    <input className="file-path validate" type="text" />
+                </div>
+                </div>
                 <button className="btn waves-effect waves-light #64bf56 blue darken-1" onClick={handleSubmit}>
                     Sign Up
                 </button>

@@ -24,7 +24,7 @@ const jwt = require("jsonwebtoken")
  * @returns {void} Sends a JSON response containing the created user's id, email, and name upon successful signup, or an error message upon failure.
  */
 const signupUser = async (req, res) => {
-    let { name, email, password } = req.body;
+    let { name, email, password, pic } = req.body;
 
     email = email.toLowerCase()
     name = name.toLowerCase()
@@ -75,6 +75,7 @@ const signupUser = async (req, res) => {
             email,
             password: hashedPassword,
             name,
+            pic
         });
 
         // Save the user to the database
@@ -118,12 +119,13 @@ const loginUser = async (req, res) => {
         if (match) {
             // Generate JWT token
             const token = jwt.sign({ _id: savedUser._id }, process.env.SECRET);
-            const { _id, name, email, followers, following } = savedUser.toObject(); // Convert to plain object
+            const { _id, name, email, followers, following, pic } = savedUser.toObject(); // Convert to plain object
             return res.status(200).json({
                 user: {
                     _id,
                     name,
                     email,
+                    pic,
                     followers: Array.from(followers.keys()),
                     following: Array.from(following.keys()),
                     token,

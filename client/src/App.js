@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import CreatePost from "./pages/CreatePost";
 import UserProfile from "./pages/UserProfile"
+import Feed from "./pages/Feed"
 import { useEffect } from "react";
 import { useUser, UserProvider } from "./context/UserContext";
 
@@ -33,6 +34,7 @@ const Routing = () => {
       <Route path="/signup" element={<Signup />} />
       <Route path="/create" element={<CreatePost />} />
       <Route path="/profile/:userId" element={<UserProfile />} />
+      <Route path="/feed" element={<Feed />} />
     </Routes>
   );
 };

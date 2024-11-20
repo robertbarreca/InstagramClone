@@ -33,6 +33,7 @@ const NavBar = () => {
                             </li>
                             <li><Link to={`/profile/${state._id}`}>Profile</Link></li>
                             <li><Link to="/create">Create Post</Link></li>
+                            <li><Link to="/feed">Feed</Link></li>
                         </div>
                     )}
                 </ul>

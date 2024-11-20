@@ -10,7 +10,7 @@ const UserProfile = () => {
     const { dispatch } = useUser();
     const user = JSON.parse(localStorage.getItem("user"));
     const [isOwner] = useState(user._id === userId)
-
+    // console.log(isOwner)
     
     useEffect(() => {
         const getUserData = async () => {
@@ -23,7 +23,7 @@ const UserProfile = () => {
                 const json = await res.json();
                 setInfluencerInfo(json);
                 // Set initial doesFollow state
-                setDoesFollow(Object.keys(json.user.followers).includes(user._id));
+                setDoesFollow(user._id in json.user.followers);
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
@@ -74,6 +74,7 @@ const UserProfile = () => {
 
     return (
         <>
+            {/* {console.log(influencerInfo.user.pic)} */}
             {influencerInfo ? (
                 <div className="profile-container">
                     <div className="profile-header-container">
@@ -81,7 +82,7 @@ const UserProfile = () => {
                             <img
                                 className="profilePic"
                                 alt="profile pic"
-                                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                                src={influencerInfo.user.pic}
                             />
                         </div>
                         <div>

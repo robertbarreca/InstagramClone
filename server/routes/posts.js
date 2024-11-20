@@ -12,7 +12,7 @@
 
 const express = require("express")
 const router = express.Router()
-const { createPost, getAllPosts, getMyPosts, likePost, unlikePost, comment, deletePost } = require("../controllers/postsController")
+const { createPost, getAllPosts, getMyPosts, likePost, unlikePost, comment, deletePost, getFollowingPosts } = require("../controllers/postsController")
 const requireToken = require("../middleware/requireToken")
 
 // create post route
@@ -35,5 +35,7 @@ router.put("/comment/:id", requireToken, comment)
 
 // delete a post
 router.delete("/delete/:id", requireToken, deletePost)
+
+router.get("/followingposts/", requireToken, getFollowingPosts)
 
 module.exports = router

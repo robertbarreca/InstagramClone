@@ -32,7 +32,7 @@ const requireToken = async (req, res, next) => {
     try {
 
         const _id = jwt.verify(token, process.env.SECRET)
-        const user = await User.findOne({ _id }).select("_id name email")
+        const user = await User.findOne({ _id }).select("_id name email following")
         req.user = user
         next()
     } catch (error) {
