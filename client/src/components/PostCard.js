@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 
 const PostCard = (props) => {
     const post = props.post;
-    console.log(post.photo)
     const user = JSON.parse(localStorage.getItem("user"));
     const [likes, setLikes] = useState(Object.keys(post.likes).length);
     const [hasLiked, setHasLiked] = useState(user._id in post.likes); 
@@ -166,8 +165,11 @@ const PostCard = (props) => {
                     (e) => {
                         e.preventDefault()
                         makeComment()
-                }}>
-                    <input type="text" placeholder="add a comment" ref={commentInputRef}></input>
+                    }}>
+                    <div className="input-field">
+                        <input type="text" placeholder="add a comment" ref={commentInputRef} />
+                    </div>
+                    
                 </form>
                 {/* display comments */}
                 {comments && comments.map(comm => {

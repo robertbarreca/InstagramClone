@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "../context/UserContext";
 import { useParams } from "react-router-dom";
 import M from "materialize-css"
+import uploadPicCloud from "../helpers"
 
 const UserProfile = () => {
     const [influencerInfo, setInfluencerInfo] = useState(null);
@@ -11,6 +12,7 @@ const UserProfile = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const [isOwner] = useState(user._id === userId)
     const [image, setImage] = useState("")
+    
     
     useEffect(() => {
         const getUserData = async () => {
@@ -22,7 +24,6 @@ const UserProfile = () => {
                 });
                 const json = await res.json();
                 setInfluencerInfo(json);
-                console.log(json)
                 // Set initial doesFollow state
                 setDoesFollow(user._id in json.user.followers);
             } catch (error) {
@@ -75,50 +76,34 @@ const UserProfile = () => {
 
     useEffect(() => {
         const uploadPic = async () => {
-    // Check if the file is an image
-    if (!image.type.startsWith('image/')) {
-        M.toast({ html: "Please upload a valid image file", classes: "#c62828 red darken-3" })
-        setImage("")
-        return
-    }
+            const secure_url = await uploadPicCloud(image)
+            if (!secure_url) {
+                return
+            }
+            try{
+                dispatch({ type: "UPDATE_PIC", payload: secure_url })
 
-    try {
-        const data = new FormData()
-        data.append("file", image)
-        data.append("upload_preset", "instaclone")
-        data.append("cloud_name", "dgbh16ua3")
+                // Update influencerInfo with the new profile pic URL
+                setInfluencerInfo((prev) => ({
+                    ...prev,
+                    user: {
+                        ...prev.user,
+                        pic: secure_url,  // Update the profile pic URL
+                    },
+                }));
 
-        let res = await fetch("https://api.cloudinary.com/v1_1/dgbh16ua3/image/upload", {
-            method: "POST",
-            body: data,
-        })
+                // Now call uploadPicBackend with the correct URL
+                uploadPicBackend(secure_url)
 
-        const json = await res.json()
-        dispatch({ type: "UPDATE_PIC", payload: json.secure_url })
-
-        // Update influencerInfo with the new profile pic URL
-        setInfluencerInfo((prev) => ({
-            ...prev,
-            user: {
-                ...prev.user,
-                pic: json.secure_url,  // Update the profile pic URL
-            },
-        }));
-
-        // Now call uploadPicBackend with the correct URL
-        uploadPicBackend(json.secure_url)
-
-    } catch (error) {
-        console.error(error)
-        return
-    }
-}
+            } catch (error) {
+                console.error(error)
+                return
+            }
+        }
 
 const uploadPicBackend = async (newPicUrl) => {
     try {
-        console.log("upload pic backend called")
-
-        const res = await fetch("/api/users/updatepic", {
+        await fetch("/api/users/updatepic", {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",  // Corrected header
@@ -128,9 +113,6 @@ const uploadPicBackend = async (newPicUrl) => {
                 pic: newPicUrl  // Use the new URL passed as an argument
             })
         })
-
-        const json = await res.json()
-        console.log(json)
 
         // Handle any further logic after the backend response if needed
     } catch (error) {

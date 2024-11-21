@@ -9,6 +9,7 @@
 import { useState, useEffect } from "react"
 import M from "materialize-css"
 import { useNavigate } from "react-router-dom"
+import uploadPicCloud from "../helpers"
 
 const CreatePost = () => {
     const [title, setTitle] = useState("")
@@ -75,34 +76,18 @@ const CreatePost = () => {
                 return
         }
 
-        // Check if the file is an image
-        if (!image.type.startsWith('image/')) {
-            M.toast({ html: "Please upload a valid image file", classes: "#c62828 red darken-3" })
-            setImage("")
+        const secure_url = await uploadPicCloud(image)
+        if (!secure_url) {
             return
         }
-        // add url to cloud if all fields are filled and image is of type image
-        try {
-        const data = new FormData()
-        data.append("file", image)
-        data.append("upload_preset", "instaclone")
-        data.append("cloud_name", "dgbh16ua3")
-        const res = await fetch("https://api.cloudinary.com/v1_1/dgbh16ua3/image/upload", {
-            method: "POST",
-            body: data,
-        })
-            // set url upon succesful post
-            const json = await res.json()
-            setUrl(json.secure_url)
-        } catch (error) {
-            console.error(error)
-            return
+        else {
+            setUrl(secure_url)
         }
     }
 
     // render page
     return (
-        <div className="card input-filled create-post-card">
+        <div className="card input-filled create-post-card input-field">
             <input
                 type="text"
                 placeholder="title"
@@ -116,9 +101,9 @@ const CreatePost = () => {
                 onChange={(e) => { setBody(e.target.value) }}
             />
             <div className="file-field input-field">
-            <div className="btn #64bf56 blue darken-1">
+            <div className="btn #64bf56 blue darken-1 input-field">
                 <span>Upload Image</span>
-                    <input
+                    <input className="file-input"
                         type="file"
                         onChange={(e) => setImage(e.target.files[0])}
                     />

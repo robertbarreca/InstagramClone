@@ -10,34 +10,34 @@ import Feed from "./pages/Feed"
 import { useUser, UserProvider } from "./context/UserContext";
 
 const Routing = () => {
-  const {user} = useUser()
+  const { state } = useUser()
   return (
     <Routes>
           {/* authenticated routes */}
           <Route
             path="/"
-            element={user ? <Home /> : <Navigate to="/signup" />}
+            element={state ? <Home /> : <Navigate to="/signup" />}
           />
           <Route
             path="/create"
-            element={user ? <CreatePost /> : <Navigate to="/signup" />}
+            element={state ? <CreatePost /> : <Navigate to="/signup" />}
           />
           <Route
             path="/profile/:userId"
-            element={user ? <UserProfile /> : <Navigate to="/signup" />}
+            element={state ? <UserProfile /> : <Navigate to="/signup" />}
           />
           <Route
             path="/feed"
-            element={user ? <Feed /> : <Navigate to="/signup" />}
+            element={state ? <Feed /> : <Navigate to="/signup" />}
           />
           {/* unauthenticated routes */}
           <Route
             path="/login"
-            element={!user ? <Login /> : <Navigate to="/" />}
+            element={!state ? <Login /> : <Navigate to="/" />}
           />
           <Route
             path="/signup"
-            element={!user ? <Signup /> : <Navigate to="/" />}
+            element={!state ? <Signup /> : <Navigate to="/" />}
           />
         </Routes>
   )

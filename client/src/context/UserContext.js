@@ -14,7 +14,7 @@ const userReducer = (state, action) => {
       localStorage.setItem("user", JSON.stringify(updatedState))
       return updatedState
     case "LOGOUT":
-      localStorage.clear()
+      localStorage.removeItem("user")
       return null;
     case "UPDATE":
       updatedState = {
@@ -25,12 +25,10 @@ const userReducer = (state, action) => {
       localStorage.setItem("user", JSON.stringify(updatedState))
       return updatedState
     case "UPDATE_PIC":
-      console.log(action.payload)
       updatedState = {
         ...state,
         pic: action.payload
       }
-      console.log(updatedState)
       localStorage.setItem("user", JSON.stringify(updatedState))
       return updatedState
     default:
@@ -46,7 +44,7 @@ export const useUser = () => useContext(UserContext);
 
 // UserProvider Component
 export const UserProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(userReducer, initialState);
+  const [state, dispatch] = useReducer(userReducer, JSON.parse(localStorage.getItem("user")) || initialState);
 
   return (
     <UserContext.Provider value={{ state, dispatch }}>

@@ -9,6 +9,7 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import M from "materialize-css"
+import uploadPicCloud from "../helpers"
 
 /**
  * @function Signup
@@ -21,6 +22,7 @@ const Signup = () => {
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
     const [image, setImage] = useState("")
     const [url, setUrl] = useState(undefined)
 
@@ -33,6 +35,10 @@ const Signup = () => {
     }, [url])
 
     const createAccount = async () => {
+        if (password !== confirmPassword) {
+            M.toast({ html: "passwords do not match", classes: "#c62828 red darken-3" })
+            return
+        }
         try {
             const res = await fetch(`/api/auth/signup`, {
                 method: "POST",
@@ -70,26 +76,14 @@ const Signup = () => {
      */
     const uploadPic = async () => {
     // Check if the file is an image
-        if (!image.type.startsWith('image/')) {
-            M.toast({ html: "Please upload a valid image file", classes: "#c62828 red darken-3" })
-            setImage("")
+        const secure_url = await uploadPicCloud(image)
+        if (secure_url) { 
+            setUrl(secure_url)
             return
         }
-        // add url to cloud if all fields are filled and image is of type image
-        try {
-        const data = new FormData()
-        data.append("file", image)
-        data.append("upload_preset", "instaclone")
-        data.append("cloud_name", "dgbh16ua3")
-        const res = await fetch("https://api.cloudinary.com/v1_1/dgbh16ua3/image/upload", {
-            method: "POST",
-            body: data,
-        })
-            // set url upon succesful post
-            const json = await res.json()
-            setUrl(json.secure_url)
-        } catch (error) {
-            console.error(error)
+        else {
+            setImage("") 
+            setUrl("")
             return
         }
     }
@@ -101,6 +95,7 @@ const Signup = () => {
                 <input type="text" placeholder="email" value={email} onChange={(e)=> {setEmail(e.target.value)}}/>
                 <input type="text" placeholder="username" value={username} onChange={(e)=> {setUsername(e.target.value)}}/>
                 <input type="password" placeholder="password" value={password} onChange={(e) => { setPassword(e.target.value) }} />
+                <input type="password" placeholder="confirm password" value={confirmPassword} onChange={(e) => { setConfirmPassword(e.target.value) }} />
                 <div className="file-field input-field">
                 <div className="btn #64bf56 blue darken-1">
                     <span>Upload Profile Picture</span>
