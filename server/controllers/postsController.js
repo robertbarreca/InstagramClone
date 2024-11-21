@@ -66,6 +66,15 @@ const getAllPosts = async (req, res) => {
     } 
 }
 
+/**
+ * @function getFollowingPosts 
+ * @description Gets all posts, that are posted by user's following
+ * 
+ * @param {Object} req - The request object 
+ * @param {Object} res - The response object used to send back the desired HTTP response
+ * 
+ * @returns Sends a JSON response containing a list the posts and the creator's of them upon successful request, or an error message upon failure.
+ */
 const getFollowingPosts = async (req, res) => {
     try {
         // get all posts
@@ -104,7 +113,15 @@ const getMyPosts = async (req, res) => {
 }
 
 
-
+/**
+ * @function likePost 
+ * @description updates the post to add a user to their likes
+ *
+ * @param {Object} req - The request object 
+ * @param {Object} res - The response object used to send back the desired HTTP response
+ * 
+ * @returns Sends a JSON response containing an object of all user's that like that post, or an error message upon failure.
+ */
 const likePost = async (req, res) => {
     try {
         const postId = req.params.id;
@@ -121,6 +138,15 @@ const likePost = async (req, res) => {
     }
 };
 
+/**
+ * @function unlikePost 
+ * @description updates the post to remove a user to their likes
+ *
+ * @param {Object} req - The request object 
+ * @param {Object} res - The response object used to send back the desired HTTP response
+ * 
+ * @returns Sends a JSON response containing an object of all user's that like that post, or an error message upon failure.
+ */
 const unlikePost = async (req, res) => {
     try {
         const postId = req.params.id;
@@ -138,6 +164,16 @@ const unlikePost = async (req, res) => {
     }
 };
 
+
+/**
+ * @function comment 
+ * @description updates the post to add a comment to their post
+ *
+ * @param {Object} req - The request object 
+ * @param {Object} res - The response object used to send back the desired HTTP response
+ * 
+ * @returns Sends a JSON response containing an array of all comments and correpsonding author's of those comments, or an error message upon failure.
+ */
 const comment = async (req, res) => {
     try {
         postId = req.params.id
@@ -158,6 +194,16 @@ const comment = async (req, res) => {
     
 }
 
+
+/**
+ * @function deletePost 
+ * @description Deletes a post
+ *
+ * @param {Object} req - The request object 
+ * @param {Object} res - The response object used to send back the desired HTTP response
+ * 
+ * @returns Sends a JSON response of the deleted post, or an error message upon failure.
+ */
 const deletePost = async (req, res) => {
     try {
         const postId = req.params.id;

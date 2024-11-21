@@ -1,3 +1,10 @@
+/**
+ * @fileoverview UserProfile
+ * @description Fetches a user's profile information and renders it to the scren
+ * 
+ * @dependencies "react-router-dom, ../components/ProfileHeader, ../components/ProfileGallery"
+ */
+
 import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import ProfileHeader from "../components/ProfileHeader";
@@ -14,6 +21,12 @@ const UserProfile = () => {
     const isOwner = useMemo(() => user._id === userId, [user._id, userId]);
 
     useEffect(() => {
+        /**
+         * @function getUserData
+         * @description sends a request to the api to retrieve user data and then sets is in a state variable upon success, otherwise prints the error to the console
+         * 
+         * @reurns void
+         */
         const getUserData = async () => {
             try {
                 const res = await fetch(`/api/users/${userId}`, {
@@ -33,7 +46,7 @@ const UserProfile = () => {
     }, [user.token, userId, user._id]);
 
     
-
+    // render page
     return (
         <>
             {influencerInfo ? (

@@ -36,6 +36,7 @@ router.put("/comment/:id", requireToken, comment)
 // delete a post
 router.delete("/delete/:id", requireToken, deletePost)
 
+// get posts of following
 router.get("/followingposts/", requireToken, getFollowingPosts)
 
 module.exports = router

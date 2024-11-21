@@ -2,6 +2,15 @@ const mongoose = require("mongoose")
 const User = require("../models/UserModel")
 const Post = mongoose.model("Post")
 
+/**
+ * @function getUser 
+ * @description gets all the information about a user
+ *
+ * @param {Object} req - The request object 
+ * @param {Object} res - The response object used to send back the desired HTTP response
+ * 
+ * @returns Sends a JSON response containing the user's information, or an error message upon failure.
+ */
 const getUser = async (req, res) => {
     try {
         // Find the user by ID 
@@ -25,6 +34,15 @@ const getUser = async (req, res) => {
     
 }
 
+/**
+ * @function followUser 
+ * @description Adds a follower to the requested user's followers and adds that user to their following
+ *
+ * @param {Object} req - The request object 
+ * @param {Object} res - The response object used to send back the desired HTTP response
+ * 
+ * @returns Sends a JSON response containing both user's information, or an error message upon failure.
+ */
 const followUser = async (req, res) => {
     try {
         const userId = req.user._id;
@@ -51,6 +69,15 @@ const followUser = async (req, res) => {
     }
 }
 
+/**
+ * @function unfollowUser 
+ * @description Removes a follower from the requested user's followers and removes that user from their following
+ *
+ * @param {Object} req - The request object 
+ * @param {Object} res - The response object used to send back the desired HTTP response
+ * 
+ * @returns Sends a JSON response containing both user's information, or an error message upon failure.
+ */
 const unfollowUser = async (req, res) => {
     try {
         const userId = req.user._id;
@@ -77,6 +104,16 @@ const unfollowUser = async (req, res) => {
     }
 }
 
+
+/**
+ * @function updatePic 
+ * @description Changes a user's profile pic in the database
+ *
+ * @param {Object} req - The request object 
+ * @param {Object} res - The response object used to send back the desired HTTP response
+ * 
+ * @returns Sends a JSON response containing the updated user's information, or an error message upon failure.
+ */
 const updatePic = async (req, res) => {
     try {
         const updatedUser = await User.findByIdAndUpdate(

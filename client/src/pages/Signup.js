@@ -34,6 +34,12 @@ const Signup = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [url])
 
+    /**
+     * @function createAccount
+     * @description First checks that passwords match, and then sends a request to the api to sign up the account. If everything works they will be navigated to the login page, if not a toast will be sent to notify the user
+     * 
+     * @returns {void}
+     */
     const createAccount = async () => {
         if (password !== confirmPassword) {
             M.toast({ html: "passwords do not match", classes: "#c62828 red darken-3" })
@@ -58,6 +64,10 @@ const Signup = () => {
         }
     }
 
+    /**
+     * @function handleSubmit
+     * @description check if the user uploaded an image and calls upload pic if yes otherwise, goes straight to account creation.
+     */
     const handleSubmit = async () => {
         if (image) {
             uploadPic()
@@ -88,6 +98,7 @@ const Signup = () => {
         }
     }
     
+    // render page
     return (
         <div className="mycard">
             <div className="card auth-card input-field">

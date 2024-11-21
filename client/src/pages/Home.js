@@ -37,6 +37,7 @@ const Home = () => {
         fetchAllPosts()
     }, [])
 
+    // render page
     return (
         <div className="home">
             {posts.length > 0 ? (

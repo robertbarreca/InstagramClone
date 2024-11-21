@@ -52,7 +52,7 @@ const PostCard = (props) => {
     };
 
 /**
- * @function likePost
+ * @function unlikePost
  * @description This function sends an API request to update the likes for the current post. It updates the like count and the user's like status in the component's state after a successful response.
  * @async
  * @returns {Promise<void>} A promise that resolves when the like count is successfully updated, 

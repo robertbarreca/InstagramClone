@@ -7,7 +7,7 @@
  * - getting all posts
  * - Getting logged in user's posts
  *
- * @dependencies express, ../controllers/postsController, ../middleware/requireToken
+ * @dependencies express, ../controllers/userController, ../middleware/requireToken
  */
 
 const express = require("express")
@@ -15,12 +15,16 @@ const router = express.Router()
 const requireToken = require("../middleware/requireToken")
 const {getUser, followUser, unfollowUser, updatePic} = require("../controllers/userController")
 
+// get user information based on id
 router.get('/:id', requireToken, getUser)
 
+// follow a user
 router.put("/follow/:id", requireToken, followUser)
 
+// unfollow a user
 router.put("/unfollow/:id", requireToken, unfollowUser)
 
+// update a profile pic
 router.put("/updatepic", requireToken, updatePic )
 
 

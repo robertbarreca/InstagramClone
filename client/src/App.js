@@ -1,3 +1,11 @@
+/**
+ * @fileoverview Main Application Component
+ * 
+ * @description
+ * This component serves as the entry point of the application, providing routing functionality
+ * for authenticated and unauthenticated users. 
+ */
+
 import './App.css';
 import NavBar from "./components/NavBar";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -9,6 +17,16 @@ import UserProfile from "./pages/UserProfile"
 import Feed from "./pages/Feed"
 import { useUser, UserProvider } from "./context/UserContext";
 
+/**
+ * @function Routing
+ * 
+ * @description
+ * Handles the routing for the application. It conditionally renders pages based on the user's
+ * authentication state. Authenticated users have access to protected routes, while unauthenticated
+ * users are redirected to the signup page.
+ * 
+ * @returns {JSX.Element} The routes for the application.
+ */
 const Routing = () => {
   const { state } = useUser()
   return (
@@ -44,6 +62,16 @@ const Routing = () => {
   
 }
 
+/**
+ * @function App
+ * 
+ * @description
+ * The main application component that wraps the app with the `UserProvider` to manage user 
+ * authentication state and renders the `NavBar` and `Routing` components. It also includes 
+ * routing using `BrowserRouter` for client-side navigation.
+ * 
+ * @returns {JSX.Element} The main layout of the application with navigation and routing.
+ */
 function App() {
   
   return (

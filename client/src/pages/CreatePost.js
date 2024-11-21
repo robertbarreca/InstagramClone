@@ -39,10 +39,12 @@ const CreatePost = () => {
                 })
 
                 const json = await res.json()
+                // something went wrong when creating post in backend
                 if (json.error) {
                     M.toast({ html: json.error, classes: "#c62828 red darken-3" })
                 }
                 else {
+                    // reset fields upon success
                     setTitle("")
                     setBody("")
                     setImage("")

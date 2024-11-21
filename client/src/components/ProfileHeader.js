@@ -1,3 +1,15 @@
+/**
+ * @file ProfileHeader Component
+ * 
+ * @description 
+ * This component renders the header section of a user's profile page. It includes 
+ * the user's profile picture, follow/unfollow button, and user statistics such as 
+ * the number of posts, followers, and following. Owners can update their profile picture 
+ * directly through this component.
+ * 
+ * @dependencies materialize/css, ../context/UserContext, ../helpers
+ */
+
 import { useEffect, useState } from "react";
 import M from "materialize-css"
 import { useUser } from "../context/UserContext";
@@ -16,6 +28,13 @@ const ProfileHeader = ({
     const { dispatch } = useUser()
     
 
+    /**
+     * @function handleFollowToggle
+     * @description calls a follow or unfollow api request and updates the state accordingly. It also handels any errors in the api by sending a toast.
+     * 
+     * @param {String} action - The type of request (follow or unfollow)
+     * @returns {Void}
+     */
     const handleFollowToggle = async (action) => {
         try {
             const endpoint = action === "follow" ? "follow" : "unfollow";
@@ -56,13 +75,24 @@ const ProfileHeader = ({
         }
     };
 
+
     useEffect(() => {
+        /**
+         * @function uploadPic
+         * @description This function first uploads a pic to cloudinary, it then takes the generated url and sends it as a body in the request to update the profile pic for the api. It also handles errors by sending a toast
+         * 
+         * @returns {void}
+         */
         const uploadPic = async () => {
-            const secure_url = await uploadPicCloud(image)
-            if (!secure_url) {
-                return
-            }
-            try{
+            try {
+                // upload pic to cloud
+                const secure_url = await uploadPicCloud(image)
+                // check that request was successful
+                if (!secure_url) {
+                    M.toast({ html: "something went wrong", classes: "#c62828 red darken-3" })
+                    return
+                }
+                // update state
                 dispatch({ type: "UPDATE_PIC", payload: secure_url })
 
                 // Update influencerInfo with the new profile pic URL
@@ -74,33 +104,24 @@ const ProfileHeader = ({
                     },
                 }));
 
-                // Now call uploadPicBackend with the correct URL
-                uploadPicBackend(secure_url)
+                // send request to backend to persist change
+                await fetch("/api/users/updatepic", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",  
+                    "Authorization": "Bearer " + user.token
+                },
+                body: JSON.stringify({
+                    pic: secure_url  
+                })
+            })
 
             } catch (error) {
                 console.error(error)
                 return
             }
         }
-
-    const uploadPicBackend = async (newPicUrl) => {
-        try {
-            await fetch("/api/users/updatepic", {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",  // Corrected header
-                    "Authorization": "Bearer " + user.token
-                },
-                body: JSON.stringify({
-                    pic: newPicUrl  // Use the new URL passed as an argument
-                })
-            })
-
-            // Handle any further logic after the backend response if needed
-        } catch (error) {
-            console.log({error: error.message})
-        }
-    }
+        // only call if image exists
         if (image) {
             uploadPic()
         }
@@ -109,53 +130,52 @@ const ProfileHeader = ({
 
     return (
         <div className="profile-header-container">
-                        {/* Profile Picture and Follow Button Container */}
-                        <div className="profile-pic-follow-container">
-                            <img
-                                className="profilePic"
-                                alt="profile pic"
-                                src={influencerInfo.user.pic}
+            <div className="profile-pic-follow-container">
+                <img
+                    className="profilePic"
+                    alt="profile pic"
+                    src={influencerInfo.user.pic}
+                />
+                {!isOwner && (
+                    <button
+                        className="btn waves-effect waves-light #64bf56 blue darken-1 toggle-btn"
+                        onClick={() => handleFollowToggle(doesFollow ? "unfollow" : "follow")}
+                    >
+                        {doesFollow ? "Unfollow" : "Follow"}
+                    </button>
+                )}
+                {isOwner && (
+                    <div className="file-field input-field">
+                        <div className="btn #64bf56 blue darken-1">
+                            <span>Update Pic</span>
+                            <input
+                                type="file"
+                                onChange={(e) => setImage(e.target.files[0])}
                             />
-                            {!isOwner && (
-                                <button
-                                    className="btn waves-effect waves-light #64bf56 blue darken-1 toggle-btn"
-                                    onClick={() => handleFollowToggle(doesFollow ? "unfollow" : "follow")}
-                                >
-                                    {doesFollow ? "Unfollow" : "Follow"}
-                                </button>
-                            )}
-                            {isOwner && (
-                                <div className="file-field input-field">
-                                    <div className="btn #64bf56 blue darken-1">
-                                        <span>Update Pic</span>
-                                        <input
-                                            type="file"
-                                            onChange={(e) => setImage(e.target.files[0])}
-                                        />
-                                    </div>
-                                    <div className="file-path-wrapper">
-                                        <input className="file-path validate" type="text" />
-                                    </div>
-                                </div>
-                            )}
                         </div>
-
-                        {/* Profile Info */}
-                        <div>
-                            <h4>{influencerInfo.user.name}</h4>
-                            <div className="profile-info-container">
-                                <h5>
-                                    {influencerInfo.posts.length}{" "}
-                                    {influencerInfo.posts.length === 1 ? "Post" : "Posts"}
-                                </h5>
-                                <h5>
-                                    {Object.keys(influencerInfo.user.followers).length}{" "}
-                                    {influencerInfo.user.followers.length === 1 ? "Follower" : "Followers"}
-                                </h5>
-                                <h5>{Object.keys(influencerInfo.user.following).length} Following</h5>
-                            </div>
+                        <div className="file-path-wrapper">
+                            <input className="file-path validate" type="text" />
                         </div>
                     </div>
+                )}
+            </div>
+
+            {/* Profile Info */}
+            <div>
+                <h4>{influencerInfo.user.name}</h4>
+                <div className="profile-info-container">
+                    <h5>
+                        {influencerInfo.posts.length}{" "}
+                        {influencerInfo.posts.length === 1 ? "Post" : "Posts"}
+                    </h5>
+                    <h5>
+                        {Object.keys(influencerInfo.user.followers).length}{" "}
+                        {influencerInfo.user.followers.length === 1 ? "Follower" : "Followers"}
+                    </h5>
+                    <h5>{Object.keys(influencerInfo.user.following).length} Following</h5>
+                </div>
+            </div>
+        </div>
     )
 }
 
