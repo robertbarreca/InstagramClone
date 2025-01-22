@@ -15,7 +15,9 @@ import Signup from "./pages/Signup";
 import CreatePost from "./pages/CreatePost";
 import UserProfile from "./pages/UserProfile"
 import Feed from "./pages/Feed"
+import ResetPassword from './pages/ResetPassword';
 import { useUser, UserProvider } from "./context/UserContext";
+
 
 /**
  * @function Routing
@@ -57,6 +59,11 @@ const Routing = () => {
             path="/signup"
             element={!state ? <Signup /> : <Navigate to="/" />}
           />
+          <Route
+            path="/resetpassword"
+            element={!state ? <ResetPassword /> : <Navigate to="/" />}
+          />
+      
         </Routes>
   )
   

@@ -12,6 +12,7 @@ const User = require("../models/UserModel")
 const validator = require("validator")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const crypto = require("crypto")
 const nodemailer = require("nodemailer")
 const sendGridTransport = require("nodemailer-sendgrid-transport")
 const transporter = nodemailer.createTransport(sendGridTransport({
@@ -91,6 +92,9 @@ const signupUser = async (req, res) => {
             to: user.email,
             from: "robbarreka@gmail.com",
             subject: "Succesful Account Creation",
+            headers: {
+                "From": "Instaclone Support <no-reply@instaclone.com>"
+            },
             html: "<h1>Welcome to Instaclone<h1>"
         })
         // Send a response with the user data
@@ -151,5 +155,44 @@ const loginUser = async (req, res) => {
     }
 };
 
+const resetPassword = async (req, res) => {
+    try {
+        // Generate a random token
+        const buffer = await crypto.randomBytes(32);
+        const token = buffer.toString("hex");
 
-module.exports = {signupUser, loginUser}
+        // Check if the user exists
+        const user = await User.findOne({ email: req.body.email });
+        if (!user) {
+            return res.status(400).json({ error: "User does not exist with the specified email" });
+        }
+
+        // Set the reset token and expiration time
+        user.resetToken = token;
+        user.expireToken = Date.now() + 3600000; // 1 hour from now
+        await user.save();
+
+        // Send reset password email
+        await transporter.sendMail({
+            to: user.email,
+            from: "robbarreka@gmail.com", // Replace with verified sender
+            subject: "Reset Password",
+            headers: {
+                "From": "Instaclone Support <no-reply@instaclone.com>"
+            },
+            html: `
+                <p>You requested to reset your password for Instaclone.</p>
+                <h5>Please click this <a href="https://localhost:3000/resetpassword/${token}">link</a> to reset your password.</h5>
+            `,
+        });
+
+        res.status(200).json({ message: "Reset email sent successfully" });
+    } catch (error) {
+        console.error("Error during password reset: ", error);
+        res.status(500).json({ error: "An error occurred while processing your request" });
+    }
+};
+
+
+
+module.exports = {signupUser, loginUser, resetPassword}

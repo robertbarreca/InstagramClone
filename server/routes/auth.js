@@ -11,7 +11,7 @@
 
 
 const express = require("express")
-const { signupUser, loginUser } = require("../controllers/authController")
+const { signupUser, loginUser, resetPassword } = require("../controllers/authController")
 const router = express.Router()
 
 // signup route
@@ -19,5 +19,7 @@ router.post("/signup", signupUser)
 
 // login route
 router.post("/login", loginUser)
+
+router.post("/resetpassword", resetPassword)
 
 module.exports = router
