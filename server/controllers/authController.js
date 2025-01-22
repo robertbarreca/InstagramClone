@@ -12,6 +12,13 @@ const User = require("../models/UserModel")
 const validator = require("validator")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const nodemailer = require("nodemailer")
+const sendGridTransport = require("nodemailer-sendgrid-transport")
+const transporter = nodemailer.createTransport(sendGridTransport({
+    auth: {
+        api_key: process.env.EMAIL_KEY 
+    }
+}))
 
 
 /**
@@ -80,7 +87,12 @@ const signupUser = async (req, res) => {
 
         // Save the user to the database
         const newUser = await user.save();
-
+        await transporter.sendMail({
+            to: user.email,
+            from: "robbarreka@gmail.com",
+            subject: "Succesful Account Creation",
+            html: "<h1>Welcome to Instaclone<h1>"
+        })
         // Send a response with the user data
         res.status(200).json({ user: newUser });
     } catch (error) {

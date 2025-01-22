@@ -29,9 +29,7 @@ const Feed = () => {
                     }
                 })
                 const json = await res.json()
-                console.log(json)
                 setPosts(json.posts)
-                // console.log(json.posts)
             } catch (error) {
                 console.log({error: error.message})
             }
@@ -41,16 +39,15 @@ const Feed = () => {
     console.log(posts)
     return (
         <div className="home">
-            {posts ? (
+            {posts === true ? (
                 posts.map((post) => (
                     <PostCard key={post._id} post={post} allPosts={posts} setPosts={setPosts} />
+
                 ))
             ) : (
                 <p>No posts available</p>
             )}
         </div>
-        
-
     )
 }
 
