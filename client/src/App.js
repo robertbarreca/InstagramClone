@@ -16,6 +16,7 @@ import CreatePost from "./pages/CreatePost";
 import UserProfile from "./pages/UserProfile"
 import Feed from "./pages/Feed"
 import ResetPassword from './pages/ResetPassword';
+import NewPassword from './pages/NewPassword';
 import { useUser, UserProvider } from "./context/UserContext";
 
 
@@ -62,6 +63,10 @@ const Routing = () => {
           <Route
             path="/resetpassword"
             element={!state ? <ResetPassword /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/resetpassword/:token"
+            element={!state ? <NewPassword /> : <Navigate to="/" />}
           />
       
         </Routes>

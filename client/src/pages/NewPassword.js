@@ -6,11 +6,10 @@
  * @dependencies materialize-css, react-router-dom
  */
 
-import { Link, useNavigate } from "react-router-dom"
+import {useNavigate, useParams } from "react-router-dom"
 import { useState } from "react"
 import M from "materialize-css"
 
-import { useUser } from "../context/UserContext";
 
 /**
  * @function Login
@@ -18,11 +17,11 @@ import { useUser } from "../context/UserContext";
  * 
  * @returns {JSX.Element} The rendered sign up page containing a form to sign up
  */
-const Login = () => {
+const NewPassword = () => {
     const navigate = useNavigate()
-    const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const { dispatch} = useUser()
+    const [confirmPassword, setConfirmPassword] = useState("")
+    const {token} = useParams()
 
     /**
      * @function handleSubmit
@@ -32,22 +31,30 @@ const Login = () => {
      * @returns {void} Sends a success message and navigates to the login page upon success. Or sends an error message upon failiure
      */
     const handleSubmit = async () => {
+        if (password !== confirmPassword) {
+                    M.toast({ html: "passwords do not match", classes: "#c62828 red darken-3" })
+                    return
+                }
         try {
-            const res = await fetch(`/api/auth/login`, {
+            console.log(password, token)
+            const res = await fetch(`/api/auth/newpassword`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({ password, email })
+                body: JSON.stringify({
+                    password,
+                    token
+                })
             })
 
             const json = await res.json()
+            console.log(json)
             
             if (json.error) {
                 M.toast({html: json.error, classes: "#c62828 red darken-3"})
             }
             else {
-                dispatch({type: "LOGIN", payload: json.user})
-                M.toast({ html: "Succesfully logged in!", classes: "#43a047 green darken-1" })
-                navigate("/")
+                M.toast({ html: "Succesfully reset password!", classes: "#43a047 green darken-1" })
+                navigate("/login")
             }
         } catch (error) {
             M.toast({html: error.message, classes: "#c62828 red darken-3"})
@@ -59,20 +66,14 @@ const Login = () => {
         <div className="mycard">
             <div className="card auth-card input-field">
                 <h2>Instagram</h2>
-                <input type="text" placeholder="email" value={email} onChange={(e)=> {setEmail(e.target.value)}}/>
-                <input type="password" placeholder="password" value={password} onChange={(e)=> {setPassword(e.target.value)}}/>
+                <input type="password" placeholder="enter new password" value={password} onChange={(e) => { setPassword(e.target.value) }} />
+                <input type="password" placeholder="confirm password" value={confirmPassword} onChange={(e) => { setConfirmPassword(e.target.value) }} />
                 <button className="btn waves-effect waves-light #64bf56 blue darken-1" onClick={handleSubmit}>
-                    Log In
+                    Reset Password
                 </button>
-                <h5>
-                    <Link to="/signup">Don't have an account?</Link>
-                </h5>
-                <h6>
-                    <Link to="/resetpassword">Forgot password?</Link>
-                </h6>
             </div>    
         </div>
     )
 }
 
-export default Login
+export default NewPassword

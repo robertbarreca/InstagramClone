@@ -182,7 +182,7 @@ const resetPassword = async (req, res) => {
             },
             html: `
                 <p>You requested to reset your password for Instaclone.</p>
-                <h5>Please click this <a href="https://localhost:3000/resetpassword/${token}">link</a> to reset your password.</h5>
+                <h5>Please click this <a href="http://localhost:3000/resetpassword/${token}">link</a> to reset your password.</h5>
             `,
         });
 
@@ -193,6 +193,33 @@ const resetPassword = async (req, res) => {
     }
 };
 
+const newPassword = async (req, res) => {
+    try {
+        const newPassword = req.body.password
+        const token = req.body.token
+        // check password is strong
+        if (!validator.isStrongPassword(newPassword)) {
+            return res.status(400).json({ error: "Password not strong enough" });
+        }
+        user = await User.findOne({ resetToken: token, expireToken: { $gt: Date.now() } })
+        console.log(user)
+        // session has expired
+        if (!user) {
+            return res.status(400).json({error: "Please try again session has expired"})
+        }
+        // hash password
+        hashedPassword = await bcrypt.hash(newPassword, 12)
+        user.password = hashedPassword
+        user.resetToken = undefined
+        user.expireToken = undefined
+        await user.save()
+        res.status(200).json({msg: "Successfully updated password!"})
+    } catch (error) {
+        console.error("Error during password reset: ", error);
+        res.status(500).json({ error: error.message });
+    }
+}
 
 
-module.exports = {signupUser, loginUser, resetPassword}
+
+module.exports = {signupUser, loginUser, resetPassword, newPassword}
