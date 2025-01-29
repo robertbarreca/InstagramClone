@@ -143,3 +143,17 @@ a{
 .file-field {
     margin-top: 10px; /* Adds space between profile pic and 'Update Pic' button */
 }
+
+.search-icon{
+  color: black;
+  margin-right: 20px
+}
+
+.modal{
+  color: black
+}
+
+.collection-item {
+    display: block !important;
+    width: 100%;
+}

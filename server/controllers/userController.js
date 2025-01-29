@@ -127,5 +127,17 @@ const updatePic = async (req, res) => {
     }
 }
 
+const searchUsers = async (req, res) => {
+    try {
+        let userPattern = new RegExp("^" + req.body.query)
+        const user = await User.find({ name: { $regex: userPattern } })
+        .select("_id name")
+        res.json({user})    
+    } catch (error) {
+        res.status(400).json({error: error.message})
+    }
+    
+}
 
-module.exports = {getUser, followUser, unfollowUser, updatePic}
+
+module.exports = {getUser, followUser, unfollowUser, updatePic, searchUsers}

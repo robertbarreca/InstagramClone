@@ -13,7 +13,7 @@
 const express = require("express")
 const router = express.Router()
 const requireToken = require("../middleware/requireToken")
-const {getUser, followUser, unfollowUser, updatePic} = require("../controllers/userController")
+const {getUser, followUser, unfollowUser, updatePic, searchUsers} = require("../controllers/userController")
 
 // get user information based on id
 router.get('/:id', requireToken, getUser)
@@ -27,5 +27,6 @@ router.put("/unfollow/:id", requireToken, unfollowUser)
 // update a profile pic
 router.put("/updatepic", requireToken, updatePic )
 
+router.post("/searchusers", requireToken, searchUsers)
 
 module.exports = router

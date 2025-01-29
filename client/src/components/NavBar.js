@@ -1,61 +1,50 @@
-/**
- * @fileoverview NavBar Component
- * 
- * @description This component renders the navigation bar for the application. 
- * It adjusts the displayed options based on the user's authentication state.
- * 
- * @dependencies react-router-dom 
- * 
- */
-
-import { useUser } from "../context/UserContext"
-import { useNavigate, Link } from "react-router-dom"
+import { useUser } from "../context/UserContext";
+import { useNavigate, Link } from "react-router-dom";
+import SearchModal from "./SearchModal";
 
 const NavBar = () => {
-    const { state, dispatch } = useUser()
-    const navigate = useNavigate()
+    const { state, dispatch } = useUser();
+    const navigate = useNavigate();
 
-    /**
-     * @function handleLogout
-     * 
-     * @description Logs the user out by clearing the authentication state 
-     * and redirecting to the login page.
-     */
+
     const handleLogout = () => {
-        dispatch({ type: "LOGOUT" })
-        navigate("/login")
-    }
+        dispatch({ type: "LOGOUT" });
+        navigate("/login");
+    };
 
     return (
         <nav>
             <div className="nav-wrapper white">
-                <Link to={state? "/" : "/signup"} className="brand-logo left">Instagram</Link>
+                <Link to={state ? "/" : "/signup"} className="brand-logo left">Instagram</Link>
                 <ul id="nav-mobile" className="right">
-                    {/* conditionally render buttons when logged out */}
-                    {!state && (
+                    {!state ? (
                         <div>
                             <li><Link to="/login">Log in</Link></li>
                             <li><Link to="/signup">Sign up</Link></li>
                         </div>
-                    )}
-                    {/* conditionally render buttons when logged in */}
-                    {state && (
+                    ) : (
                         <div>
                             <li>
-                                <button
-                                    className="btn #c62828 red darken-3"
-                                    onClick={handleLogout}
-                                >Logout</button>
+                                <i className="material-icons search-icon modal-trigger" data-target="modal1">
+                                    search
+                                </i>
                             </li>
-                            <li><Link to={state ? `/profile/${state._id}` : "/signup"}>Profile</Link></li>
+                            <li>
+                                <button className="btn #c62828 red darken-3" onClick={handleLogout}>
+                                    Logout
+                                </button>
+                            </li>
+                            <li><Link to={`/profile/${state._id}`}>Profile</Link></li>
                             <li><Link to="/create">Create Post</Link></li>
                             <li><Link to="/feed">Feed</Link></li>
                         </div>
                     )}
                 </ul>
             </div>
+            {/* Include the extracted modal component */}
+            <SearchModal />
         </nav>
-    )
-}
+    );
+};
 
-export default  NavBar
+export default NavBar;

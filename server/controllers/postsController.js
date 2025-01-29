@@ -56,7 +56,8 @@ const getAllPosts = async (req, res) => {
         // get all posts
         const posts = await Post.find()
             .populate("creator", "_id name")
-            .populate("comments.author", "_id name");
+            .populate("comments.author", "_id name")
+            .sort("-createdAt");
         // posts exists
         if (posts) {
             res.status(200).json({posts})
@@ -81,7 +82,8 @@ const getFollowingPosts = async (req, res) => {
         const followingIds = Array.from(req.user.following.keys());
         const posts = await Post.find({ creator: { $in: followingIds } })
             .populate("creator", "_id name")
-            .populate("comments.author", "_id name");
+            .populate("comments.author", "_id name")
+            .sort("-createdAt");
         // posts exists
         if (posts) {
             res.status(200).json({posts})
