@@ -8,7 +8,7 @@
  *
  * @dependencies ../models/PostModel 
  */
-const Post = require("../models/PostModel");
+const Post = require("../models/postModel");
 
 /**
  * @function createPost 
