@@ -90,7 +90,7 @@ const signupUser = async (req, res) => {
         const newUser = await user.save();
         await transporter.sendMail({
             to: user.email,
-            from: "robbarreka@gmail.com",
+            from: process.env.EMAIL,
             subject: "Succesful Account Creation",
             headers: {
                 "From": "Instaclone Support <no-reply@instaclone.com>"
@@ -185,7 +185,7 @@ const resetPassword = async (req, res) => {
         // Send reset password email
         await transporter.sendMail({
             to: user.email,
-            from: "robbarreka@gmail.com", // Replace with verified sender
+            from: process.env.EMAIL, 
             subject: "Reset Password",
             headers: {
                 "From": "Instaclone Support <no-reply@instaclone.com>"

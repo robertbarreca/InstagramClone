@@ -22,7 +22,7 @@ const NavBar = () => {
     return (
         <nav>
             <div className="nav-wrapper white">
-                <Link to={state ? "/" : "/signup"} className="brand-logo left">Instagram</Link>
+                <Link to={state ? "/" : "/signup"} className="brand-logo left">Instaclone</Link>
                 <ul id="nav-mobile" className="right">
                     {/* Conditionally render links based on logged in state */}
                     {!state ? (
