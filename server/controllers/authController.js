@@ -192,7 +192,7 @@ const resetPassword = async (req, res) => {
             },
             html: `
                 <p>You requested to reset your password for Instaclone.</p>
-                <h5>Please click this <a href="http://localhost:3000/resetpassword/${token}">link</a> to reset your password.</h5>
+                <h5>Please click this <a href="https://instagramclone-frontend.onrender.com/resetpassword/${token}">link</a> to reset your password.</h5>
             `,
         });
 
