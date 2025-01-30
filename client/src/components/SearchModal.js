@@ -1,6 +1,17 @@
-import { useRef, useEffect, useState} from "react";
+/**
+ * @fileoverview Search Modal
+ * 
+ * @description This file contains the functionality to search up users by their usernames within a popup modal
+ * 
+ * @dependencies materialize-css, react-router-dom
+ */
+
+
+import { useRef, useEffect, useState } from "react";
 import M from "materialize-css";
 import { Link } from "react-router-dom";
+
+
 
 const SearchModal = () => {
     const user = JSON.parse(localStorage.getItem("user"))
@@ -8,19 +19,29 @@ const SearchModal = () => {
     const [search, setSearch] = useState("");
     const [userDetails, setUserDetails] = useState([])
 
+    // render modal
     useEffect(() => {
         M.Modal.init(searchModal.current);
     }, []);
 
 
+    /**
+     * @function fetchUsers
+     * @description Makes a request to the backend to get all users that have usernames that start with the current query.
+     * 
+     * @param {String} query The usernames being searched for 
+     * @returns {void}
+     */
     const fetchUsers = async (query) => {
-    setSearch(query);
+        setSearch(query);
+    // Check that query exists
     if (!query.trim()) {
         setUserDetails([]);
         return;
     }
 
-    try {
+        try {
+        // backend request
         const res = await fetch("/api/users/searchUsers", {
             method: "POST",
             headers: {

@@ -127,6 +127,15 @@ const updatePic = async (req, res) => {
     }
 }
 
+/**
+ * @function searchUsers 
+ * @description Gets all users in db that have usernames that start with search term
+ *
+ * @param {Object} req - The request object 
+ * @param {Object} res - The response object used to send back the desired HTTP response
+ * 
+ * @returns Sends a JSON response containing an array of all users that match the search, or an error message upon failure.
+ */
 const searchUsers = async (req, res) => {
     try {
         let userPattern = new RegExp("^" + req.body.query)

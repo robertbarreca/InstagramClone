@@ -155,6 +155,16 @@ const loginUser = async (req, res) => {
     }
 };
 
+
+/**
+ * @function resetPassword
+ * @description Generates and send an email of a link to a page so that a user can reset their password.
+ * 
+ * @param {Object} req - The request object containing the user credentials
+ * @param {Object} res - The response object used to send back the desired HTTP response
+ * 
+ * @returns {void} Sends a JSON response saying email successfully sent upon success, or an error message upon failure.
+ */
 const resetPassword = async (req, res) => {
     try {
         // Generate a random token
@@ -193,6 +203,16 @@ const resetPassword = async (req, res) => {
     }
 };
 
+
+/**
+ * @function resetPassword
+ * @description Takes in new password from request, hashes it and replaces old password with new one in the database
+ * 
+ * @param {Object} req - The request object containing the user credentials and new unhashed password
+ * @param {Object} res - The response object used to send back the desired HTTP response
+ * 
+ * @returns {void} Sends a JSON response saying password updated successfully sent upon success, or an error message upon failure.
+ */
 const newPassword = async (req, res) => {
     try {
         const newPassword = req.body.password

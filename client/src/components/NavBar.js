@@ -1,3 +1,10 @@
+/**
+ * @file Navigation Bar
+ * @description This file renders the navigation bar at the top of all pages to the website. It contains links to other pages.
+ * 
+ * @dependencies UserContext, react-router-dom, SearchModal
+ */
+
 import { useUser } from "../context/UserContext";
 import { useNavigate, Link } from "react-router-dom";
 import SearchModal from "./SearchModal";
@@ -17,6 +24,7 @@ const NavBar = () => {
             <div className="nav-wrapper white">
                 <Link to={state ? "/" : "/signup"} className="brand-logo left">Instagram</Link>
                 <ul id="nav-mobile" className="right">
+                    {/* Conditionally render links based on logged in state */}
                     {!state ? (
                         <div>
                             <li><Link to="/login">Log in</Link></li>

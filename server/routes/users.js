@@ -27,6 +27,7 @@ router.put("/unfollow/:id", requireToken, unfollowUser)
 // update a profile pic
 router.put("/updatepic", requireToken, updatePic )
 
+// search for users
 router.post("/searchusers", requireToken, searchUsers)
 
 module.exports = router

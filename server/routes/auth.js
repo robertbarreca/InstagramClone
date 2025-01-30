@@ -20,8 +20,11 @@ router.post("/signup", signupUser)
 // login route
 router.post("/login", loginUser)
 
+// route to email user link to reset password
 router.post("/resetpassword", resetPassword)
 
+
+// route to put new password in db
 router.post("/newpassword", newPassword)
 
 module.exports = router
