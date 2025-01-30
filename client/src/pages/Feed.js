@@ -39,7 +39,7 @@ const Feed = () => {
     console.log(posts)
     return (
         <div className="home">
-            {posts === true ? (
+            {posts.length > 0 ? (
                 posts.map((post) => (
                     <PostCard key={post._id} post={post} allPosts={posts} setPosts={setPosts} />
 
