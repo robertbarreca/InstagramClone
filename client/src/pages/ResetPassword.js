@@ -1,7 +1,7 @@
 /**
- * @fileoverview Log In Page
+ * @fileoverview Reset Password Page
  * 
- * @description This component renders a login form for existing users, allowing them to log in upon form submission. It handles user input for email and password and displays error messages if log in fails.
+ * @description This component renders a form for existing users to get a link via email to reset their password, It handles user input for email and displays error messages if the request fails.
  * 
  * @dependencies materialize-css, react-router-dom
  */
@@ -12,7 +12,7 @@ import M from "materialize-css"
 
 /**
  * @function Login
- * @description This page renders the form for user sign up. And it contains the logic to create a new user document on the backend api.
+ * @description This page renders the form for user emails. And sends a request to the backend to send the user corresponding to the email a link.
  * 
  * @returns {JSX.Element} The rendered sign up page containing a form to sign up
  */
@@ -22,10 +22,10 @@ const ResetPassword = () => {
 
     /**
      * @function handleSubmit
-     * @description Sends a post request to the API setting the body to be password and email. It then alerts the user if the request was a success or not.
+     * @description Sends a post request to the API that sends a link to the corresponding user to reset their password
      * 
      * @async
-     * @returns {void} Sends a success message and navigates to the login page upon success. Or sends an error message upon failiure
+     * @returns {void} Sends a success message and sends a success toast upon success. Or sends an error message upon failiure
      */
     const handleSubmit = async () => {
         try {
@@ -53,7 +53,7 @@ const ResetPassword = () => {
     return (
         <div className="mycard">
             <div className="card auth-card input-field">
-                <h2>Instagram</h2>
+                <h2>Instaclone</h2>
                 <input type="text" placeholder="email" value={email} onChange={(e)=> {setEmail(e.target.value)}}/>
                 <button className="btn waves-effect waves-light #64bf56 blue darken-1" onClick={handleSubmit}>
                     Reset Password

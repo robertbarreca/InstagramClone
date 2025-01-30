@@ -1,7 +1,7 @@
 /**
- * @fileoverview Log In Page
+ * @fileoverview New Password Page
  * 
- * @description This component renders a login form for existing users, allowing them to log in upon form submission. It handles user input for email and password and displays error messages if log in fails.
+ * @description This component renders a reset password form for existing users, allowing them to change their password assuming they have the link. 
  * 
  * @dependencies materialize-css, react-router-dom
  */
@@ -12,10 +12,10 @@ import M from "materialize-css"
 
 
 /**
- * @function Login
- * @description This page renders the form for user sign up. And it contains the logic to create a new user document on the backend api.
+ * @function NewPassword
+ * @description This page renders the form for users to reset their passwords. And it contains the logic to create a new user document on the backend api.
  * 
- * @returns {JSX.Element} The rendered sign up page containing a form to sign up
+ * @returns {JSX.Element} The rendered reset password page containing a form to do so
  */
 const NewPassword = () => {
     const navigate = useNavigate()
@@ -25,7 +25,7 @@ const NewPassword = () => {
 
     /**
      * @function handleSubmit
-     * @description Sends a post request to the API setting the body to be password and email. It then alerts the user if the request was a success or not.
+     * @description Sends a post request to the API setting the body to be the new password. It then alerts the user if the request was a success or not.
      * 
      * @async
      * @returns {void} Sends a success message and navigates to the login page upon success. Or sends an error message upon failiure
@@ -65,7 +65,7 @@ const NewPassword = () => {
     return (
         <div className="mycard">
             <div className="card auth-card input-field">
-                <h2>Instagram</h2>
+                <h2>Instaclone</h2>
                 <input type="password" placeholder="enter new password" value={password} onChange={(e) => { setPassword(e.target.value) }} />
                 <input type="password" placeholder="confirm password" value={confirmPassword} onChange={(e) => { setConfirmPassword(e.target.value) }} />
                 <button className="btn waves-effect waves-light #64bf56 blue darken-1" onClick={handleSubmit}>
