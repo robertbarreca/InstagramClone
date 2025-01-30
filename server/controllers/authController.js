@@ -177,11 +177,11 @@ const resetPassword = async (req, res) => {
             return res.status(400).json({ error: "User does not exist with the specified email" });
         }
 
-        // Set the reset token and expiration time
+        // Set the reset token and expiration time for 1 hr
         user.resetToken = token;
-        user.expireToken = Date.now() + 3600000; // 1 hour from now
+        user.expireToken = Date.now() + 3600000; 
         await user.save();
-
+        console.log(token)
         // Send reset password email
         await transporter.sendMail({
             to: user.email,

@@ -67,11 +67,9 @@ const Routing = () => {
           <Route
             path="/resetpassword/:token"
             element={!state ? <NewPassword /> : <Navigate to="/" />}
-          />
-      
+          />   
         </Routes>
-  )
-  
+  ) 
 }
 
 /**
