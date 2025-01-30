@@ -37,7 +37,7 @@ const NewPassword = () => {
                 }
         try {
             console.log(password, token)
-            const res = await fetch(`/api/auth/newpassword`, {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/newpassword`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({

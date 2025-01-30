@@ -29,7 +29,7 @@ const CreatePost = () => {
         const createPost = async () => {
             const user = JSON.parse(localStorage.getItem("user"))
             try {
-                const res = await fetch(`/api/posts/createpost`, {
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/posts/createpost`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

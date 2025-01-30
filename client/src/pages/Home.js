@@ -23,7 +23,7 @@ const Home = () => {
          */
         const fetchAllPosts = async () => {
             try {   
-                const res = await fetch("/api/posts/allPosts", {
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/posts/allPosts`, {
                     headers: {
                         "Authorization": "Bearer " + user.token
                     }

@@ -42,7 +42,7 @@ const SearchModal = () => {
 
         try {
         // backend request
-        const res = await fetch("/api/users/searchUsers", {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/users/searchUsers`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

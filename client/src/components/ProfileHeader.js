@@ -38,7 +38,7 @@ const ProfileHeader = ({
     const handleFollowToggle = async (action) => {
         try {
             const endpoint = action === "follow" ? "follow" : "unfollow";
-            const res = await fetch(`/api/users/${endpoint}/${userId}`, {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/users/${endpoint}/${userId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -105,7 +105,7 @@ const ProfileHeader = ({
                 }));
 
                 // send request to backend to persist change
-                await fetch("/api/users/updatepic", {
+                await fetch(`${process.env.REACT_APP_API_URL}/api/users/updatepic`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",  

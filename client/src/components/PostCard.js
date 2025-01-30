@@ -29,7 +29,7 @@ const PostCard = (props) => {
  */
     const likePost = async () => {
         try {
-            const res = await fetch(`/api/posts/like/${post._id}`, {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/posts/like/${post._id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -61,7 +61,7 @@ const PostCard = (props) => {
  */
     const unlikePost = async () => {
         try {
-            const res = await fetch(`/api/posts/unlike/${post._id}`, {
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/posts/unlike/${post._id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -87,7 +87,7 @@ const PostCard = (props) => {
      * @throws {Error} If there is an error during the fetch request, the error is logged to the console.
      */
     const deletePost = async () => {
-        const res = await fetch(`/api/posts/delete/${post._id}`, {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/posts/delete/${post._id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -118,7 +118,7 @@ const PostCard = (props) => {
             return
         }
 
-        const res = await fetch(`/api/posts/comment/${post._id}`, {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/posts/comment/${post._id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

@@ -23,7 +23,7 @@ const Feed = () => {
          */
         const fetchPosts = async () => {
             try {   
-                const res = await fetch("/api/posts/followingPosts", {
+                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/posts/followingPosts`, {
                     headers: {
                         "Authorization": "Bearer " + user.token
                     }
