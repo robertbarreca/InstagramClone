@@ -11,7 +11,7 @@ import PostCard from "../components/PostCard";
 const Home = () => {
     const [posts, setPosts] = useState([])
     const [currentPage, setCurrentPage] = useState(1);
-    const postsPerPage = 25;
+    const postsPerPage = 15;
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
@@ -73,9 +73,6 @@ const Home = () => {
                 <p>No posts available</p>
             )}
         </div>
-
-        
-
     )
 }
 
