@@ -23,6 +23,10 @@ const Home = () => {
     }
     };
 
+    // Scroll to top when currentPage changes
+    useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [currentPage]);
 
 
     useEffect(() => {

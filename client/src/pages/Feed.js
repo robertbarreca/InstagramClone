@@ -23,6 +23,12 @@ const Feed = () => {
     }
     };
 
+    // Scroll to top when currentPage changes
+    useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [currentPage]);
+
+        
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("user"))
         /**
