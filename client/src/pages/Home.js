@@ -4,7 +4,7 @@
  * @description This page contains the logic for getting all of the posts and renders them
  * @dependencies ../components/PostCard
  */
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import PostCard from "../components/PostCard";
 
 
@@ -16,6 +16,7 @@ const Home = () => {
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
     const totalPages = Math.ceil(posts.length / postsPerPage);
+    const topRef = useRef();
 
     const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -25,8 +26,10 @@ const Home = () => {
 
     // Scroll to top when currentPage changes
     useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    }, [currentPage]);
+        if (topRef.current) {
+            topRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [currentPosts]);
 
 
     useEffect(() => {
@@ -58,6 +61,7 @@ const Home = () => {
     // render page
     return (
         <div className="home">
+            <div ref={topRef}/>
             {posts.length > 0 ? (
                 <>
                 {currentPosts.map((post) => (
