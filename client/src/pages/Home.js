@@ -26,9 +26,7 @@ const Home = () => {
 
     // Scroll to top when currentPage changes
     useEffect(() => {
-        if (topRef.current) {
-            topRef.current.scrollIntoView({ behavior: "smooth" });
-        }
+        window.scrollTo({ top: 0, behavior: "auto" });
     }, [currentPosts]);
 
 
