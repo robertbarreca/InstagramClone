@@ -10,6 +10,20 @@ import PostCard from "../components/PostCard";
 
 const Home = () => {
     const [posts, setPosts] = useState([])
+    const [currentPage, setCurrentPage] = useState(1);
+    const postsPerPage = 25;
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+    const totalPages = Math.ceil(posts.length / postsPerPage);
+
+    const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+        setCurrentPage(newPage);
+    }
+    };
+
+
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("user"))
@@ -41,13 +55,25 @@ const Home = () => {
     return (
         <div className="home">
             {posts.length > 0 ? (
-                posts.map((post) => (
+                <>
+                {currentPosts.map((post) => (
                     <PostCard key={post._id} post={post} allPosts={posts} setPosts={setPosts} />
-                ))
+                ))}
+                <div className="pagination">
+                    <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                    Prev
+                    </button>
+                    <span>Page {currentPage} of {totalPages}</span>
+                    <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                    Next
+                    </button>
+                </div>
+                </>
             ) : (
                 <p>No posts available</p>
             )}
         </div>
+
         
 
     )
