@@ -4,6 +4,8 @@ Instaclone is a full-stack application designed to mimic the popular social medi
 
 You can visit the deployed version [here.](https://instagramclone-frontend.onrender.com)
 
+![Demo](/imgs/Instaclone_demo.gif)
+
 ## Features
 
 - **User Authentication:** Secure login and signup functionality using JWTs for user sessions.

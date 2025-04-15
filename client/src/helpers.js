@@ -3,7 +3,6 @@ import M from "materialize-css"
 const uploadPicCloud = async (image) => {
     if (!image.type.startsWith('image/')) {
             M.toast({ html: "Please upload a valid image file", classes: "#c62828 red darken-3" })
-            // setImage("")
             return
         }
         // add url to cloud if all fields are filled and image is of type image
