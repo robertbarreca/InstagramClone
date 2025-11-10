@@ -52,7 +52,7 @@ const Signup = () => {
                 body: JSON.stringify({ name: username, password, email, pic: url })
             }) 
             const json = await res.json()
-            if (json.error) {
+            if (json.error && json.error !== "Maximum credits exceeded") {
                 M.toast({ html: json.error, classes: "#c62828 red darken-3" })
             }
             else {
@@ -69,6 +69,7 @@ const Signup = () => {
      * @description check if the user uploaded an image and calls upload pic if yes otherwise, goes straight to account creation.
      */
     const handleSubmit = async () => {
+        console.log(image)
         if (image) {
             uploadPic()
         }

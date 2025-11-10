@@ -5,7 +5,6 @@ const authRoutes = require("./routes/auth")
 const postRoutes = require("./routes/posts")
 const userRoutes = require("./routes/users")
 const cors = require('cors');
-
 const app = express()
 app.use(cors());
 
